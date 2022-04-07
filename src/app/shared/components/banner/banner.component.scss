@@ -1,0 +1,54 @@
+@import 'src/app/shared/styles/variables/variables';
+@import 'src/app/shared/styles/functions/functions';
+
+.banner {
+	display: flex;
+	padding: $spacing-sm $spacing-md;
+	background: $mist-light;
+	align-items: center;
+	border-radius: rem(3);
+	color: $gray-30;
+	font-size: rem(15);
+	line-height: $line-height-15;
+	border: 1px solid rgba($mist, 0.3);
+	ul {
+		margin: 0;
+	}
+	&__icon {
+		//box-sizing: border-box;
+		width: rem(24);
+		height: rem(24);
+		background: white;
+		border-radius: 50%;
+		margin-top: $spacing-xs;
+		margin-bottom: $spacing-xs;
+		margin-right: $spacing-lg;
+		flex-grow: 0;
+		flex-shrink: 0;
+	}
+	&--error {
+		background: $error-lighter;
+		border: 1px solid rgba($error, 0.3);
+		.banner__icon {
+			color: $error;
+			box-shadow: 0 0 0 3px $error-light;
+		}
+	}
+	&--warning {
+		background: $warning;
+		border: 1px solid rgba($warning, 0.3);
+		color: $warning-text;
+		.banner__icon {
+			color: $warning;
+			box-shadow: 0 0 0 3px $warning-light;
+		}
+	}
+	&--success {
+		background: $success-lighter;
+		border: 1px solid rgba($success, 0.3);
+		.banner__icon {
+			color: $success;
+			box-shadow: 0 0 0 3px $success-light;
+		}
+	}
+}

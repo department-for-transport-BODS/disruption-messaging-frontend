@@ -1,0 +1,132 @@
+//
+// _FORMS.scss
+//
+// Base styling for form html elements
+
+input,
+label,
+select {
+	display: block;
+	font-size: $font-size-default;
+}
+
+label,
+legend {
+	display: block;
+	font-weight: $font-weight-semibold;
+	margin: $spacing-xs 0;
+	color: $gray-30;
+	font-size: $font-size-default;
+}
+label {
+	&[required]:after {
+		content: '*';
+	}
+
+	abbr {
+		display: none;
+	}
+}
+fieldset {
+	border: 0 none;
+	padding: 0;
+	margin: 0;
+}
+
+[type='color'],
+[type='date'],
+[type='datetime'],
+[type='datetime-local'],
+[type='email'],
+[type='month'],
+[type='number'],
+[type='password'],
+[type='search'],
+[type='tel'],
+[type='text'],
+[type='time'],
+[type='url'],
+[type='week'],
+input:not([type]),
+textarea,
+select {
+	display: block;
+	color: $shade-dark;
+	box-sizing: border-box;
+	transition: border-color;
+	background-color: white;
+	background-clip: padding-box;
+	border: 1px solid $form-border-color;
+	font-family: $font-family-default;
+	font-size: $font-size-default;
+	line-height: $line-height-default;
+	font-weight: $font-weight-medium;
+	margin-bottom: 0;
+	border-radius: rem(4);
+	padding: $spacing-sm-withborder;
+	height: rem(40);
+	width: 100%;
+	&::placeholder {
+		color: $shade-light;
+		opacity: 1;
+	}
+	&:hover {
+		border-color: darken($form-border-color, 10);
+	}
+
+	&:focus {
+		border-color: $mint;
+		outline: 0;
+	}
+	// Unstyle the caret on `<select>`s in IE10+.
+	&::-ms-expand {
+		background-color: transparent;
+		border: 0;
+	}
+	&:disabled,
+	&[readonly] {
+		background: $mist-light;
+		opacity: 1;
+	}
+	&:invalid {
+		box-shadow: none;
+	}
+}
+
+textarea {
+	resize: vertical;
+	height: rem(120);
+	vertical-align: bottom;
+}
+
+// override the inner shadow on iOS devices
+input[type='text'],
+input[type='search'],
+input[type='password'],
+input[type='email'] {
+	appearance: none;
+}
+
+select {
+	&:focus::-ms-value {
+		// Suppress the nested default white text on blue background highlight given to
+		// the selected option text when the (still closed) <select> receives focus
+		// in IE and (under certain conditions) Edge, as it looks bad and cannot be made to
+		// match the appearance of the native widget.
+		// See https://github.com/twbs/bootstrap/issues/19398.
+		color: $font-color-default;
+		background-color: white;
+	}
+	&[size],
+	&[multiple] {
+		height: auto;
+	}
+}
+
+button,
+input[type='submit'] {
+	appearance: none;
+	cursor: pointer;
+	user-select: none;
+	vertical-align: middle;
+}

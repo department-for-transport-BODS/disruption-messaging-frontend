@@ -1,0 +1,36 @@
+@import 'src/app/shared/styles/variables/variables';
+@import 'src/app/shared/styles/functions/functions';
+.popover {
+	position: relative;
+	&__dropdown {
+		background: white;
+		margin: 0;
+		position: relative;
+		border: 1px solid $mist;
+		padding-left: 0;
+		z-index: $z-popover;
+	}
+	&__menu {
+		list-style-type: none;
+		padding: 0.5rem 0 0.5rem 0;
+
+
+		:hover {
+			display:block !important;
+			cursor: pointer;
+			background-color: $mist-light;
+		}
+	}
+
+	&__item {
+		padding: 0.5rem;
+	}
+}
+
+@include bp($tablet) {
+	.popover {
+		&__dropdown {
+			right: 0;
+		}
+	}
+}

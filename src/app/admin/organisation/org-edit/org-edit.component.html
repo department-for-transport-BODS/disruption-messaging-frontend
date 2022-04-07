@@ -1,0 +1,60 @@
+<div id="organisation-form-container" class="form">
+	<h2>{{ modalTitle }}</h2>
+	<form [formGroup]="organisationForm" (ngSubmit)="onSubmit()">
+		<div class="form__group" [ngClass]="{ 'form__group--error': hasError('name') }">
+			<label class="form__label" for="org-name">Name:</label>
+			<input id="org-name" class="form__control" type="text" formControlName="name" required />
+			<div *ngIf="hasError('name')" class="form__validation">
+				<div *ngIf="name.errors.required" class="form__feedback form__feedback--error">
+					Name is required.
+				</div>
+				<div *ngIf="name.errors.maxlength" class="form__feedback form__feedback--error">
+					Name must be no more than 250 characters
+				</div>
+			</div>
+		</div>
+		<div class="form__group" [ngClass]="{ 'form__group--error': hasError('url') }">
+			<label class="form__label" for="org-url">URL:</label>
+			<input
+				id="org-url"
+				class="form__control"
+				type="text"
+				formControlName="url"
+				placeholder="http://"/>
+			<div *ngIf="hasError('url')" class="form__validation">
+				<div *ngIf="url.errors.pattern" class="form__feedback form__feedback--error">
+					Please enter a valid url.
+				</div>
+			</div>
+		</div>
+		<div class="form__group">
+			<label class="form__label">Admin Areas:</label>
+			<ng-select
+				[items]="allAdminAreas$ | async"
+				bindLabel="name"
+				[multiple]="true"
+				[searchable]="true"
+				[selectOnTab]="true"
+				[hideSelected]="true"
+				labelForId="areaCode"
+				placeholder="Select"
+				formControlName="adminAreas"
+			>
+			</ng-select>
+		</div>
+	</form>
+	<dm-spinner name='edit-organisation' [show]="orgService.loading$ | async"></dm-spinner>
+	<dm-banner *ngIf="orgService.errors$ | async as errors" appearance="error">{{ errors }}</dm-banner>
+	<dm-banner *ngIf="orgService.serverResponse$ | async" appearance="success">
+		<span *ngIf="organisation">Organisation has been updated.</span>
+		<span *ngIf="!organisation">Organisation has been added.</span>
+	</dm-banner>
+	<div class="form__actions">
+		<dm-button-group justify="right">
+			<dm-button btnId="edit-org-modal-cancel" (onClick)="organisationForm.reset(); orgService.modalClose()"
+				>Close</dm-button
+			>
+			<dm-button appearance="primary" btnId="edit-org-modal-submit" (onClick)="onSubmit()">Submit</dm-button>
+		</dm-button-group>
+	</div>
+</div>

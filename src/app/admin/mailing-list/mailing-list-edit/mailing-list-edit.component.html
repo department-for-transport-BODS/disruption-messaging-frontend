@@ -1,0 +1,73 @@
+<div id="ml-form-container" class="form">
+	<h2>{{ modalTitle }}</h2>
+	<form [formGroup]="mlForm" (ngSubmit)="onSubmit()">
+		<div class="form__group" [ngClass]="{ 'form__group--error': hasError('email') }">
+			<label class="form__label" for="ml-entry-email">Email:</label>
+			<input id="ml-entry-email" class="form__control" type="text" formControlName="email" required />
+			<div *ngIf="hasError('email')" class="form__validation">
+				<div *ngIf="email.errors.required" class="form__feedback form__feedback--error">
+					Email is required.
+				</div>
+				<div *ngIf="email.errors.email" class="form__feedback form__feedback--error">
+					Please enter a valid email.
+				</div>
+			</div>
+		</div>
+		<div class="form__group" [ngClass]="{ 'form__group--error': hasError('severity') }">
+			<label class="form__label">Severity:</label>
+			<ng-select
+				id="ml-form-severity"
+				[items]="severityList$ | async"
+				bindLabel="title"
+				[multiple]="true"
+				[searchable]="true"
+				[selectOnTab]="true"
+				[hideSelected]="true"
+				labelForId="value"
+				placeholder="Severity"
+				formControlName="severity"
+			>
+			</ng-select>
+			<div *ngIf="hasError('severity')" class="form__validation">
+				<div *ngIf="severity.errors.required" class="form__feedback form__feedback--error">
+					Severity is required.
+				</div>
+			</div>
+		</div>
+		<div *ngIf="allOrgs.length > 1" class="form__group"
+				[ngClass]="{ 'form__group--error': hasError('organisation') }">
+			<label class="form__label">Organisation:</label>
+			<ng-select
+				id="ml-form-organisation"
+				[items]="allOrgs"
+				bindLabel="name"
+				[searchable]="true"
+				[selectOnTab]="true"
+				[hideSelected]="true"
+				labelForId="id"
+				placeholder="Organisation"
+				formControlName="organisation"
+			>
+			</ng-select>
+			<div *ngIf="hasError('organisation')" class="form__validation">
+				<div *ngIf="organisation.errors.required" class="form__feedback form__feedback--error">
+					Organisation is required.
+				</div>
+			</div>
+		</div>
+	</form>
+	<dm-spinner name='edit-mailing-list' [show]="service.loading$ | async"></dm-spinner>
+	<dm-banner *ngIf="service.errors$ | async as errors" appearance="error">{{ mapError(errors) }}</dm-banner>
+	<dm-banner *ngIf="service.serverResponse$ | async" appearance="success">
+		<span *ngIf="mlEntry">Mailing list has been updated.</span>
+		<span *ngIf="!mlEntry">Mailing list entry has been added.</span>
+	</dm-banner>
+	<div class="form__actions">
+		<dm-button-group justify="right">
+			<dm-button btnId="edit-ml-modal-cancel" (onClick)="mlForm.reset(); service.modalClose()"
+				>Close</dm-button
+			>
+			<dm-button appearance="primary" btnId="edit-ml-modal-submit" (onClick)="onSubmit()">Submit</dm-button>
+		</dm-button-group>
+	</div>
+</div>

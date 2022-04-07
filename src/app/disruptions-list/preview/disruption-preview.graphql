@@ -1,0 +1,63 @@
+query disruptionPreviewById($id: ID!) {
+	disruption(id: $id) {
+		id
+		title
+		createdBy {
+			username
+			id
+		}
+		isTemplate
+		status
+		isLive
+		description
+		severity
+		impact {
+			edges {
+				node {
+					id
+					name
+					severity
+					mode
+					delay
+					severity
+					operators {
+						edges {
+							node {
+								id
+								name
+							}
+						}
+					}
+					lines {
+						edges {
+							node {
+								id
+								name
+							}
+						}
+					}
+					stops {
+						edges {
+							node {
+								id
+								commonName
+							}
+						}
+					}
+				}
+			}
+		}
+		reason
+		isOpenEnded
+		validityPeriod {
+			id
+			startDate
+			endDate
+			startTime
+			endTime
+			days
+			repetition
+			finalDate
+		}
+	}
+}

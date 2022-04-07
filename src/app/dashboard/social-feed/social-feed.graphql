@@ -1,0 +1,21 @@
+query socialMessages {
+	socialMessages {
+		edges {
+			node {
+				id
+				socialAccount {
+					...SocialAccountFragment
+				}
+				hootsuiteProfile {
+					...HootSuiteProfileFragment
+				}
+				publishedOn
+				message
+				image {
+					name
+					url
+				}
+			}
+		}
+	}
+}

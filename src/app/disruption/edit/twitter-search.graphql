@@ -1,0 +1,8 @@
+query twitterSearch(
+	$queryString: String!
+	) {
+	twitterSearch(queryString: $queryString) {
+		id
+		screenName
+	}
+}

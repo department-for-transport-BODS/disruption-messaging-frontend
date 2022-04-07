@@ -1,0 +1,42 @@
+query allSocialAccounts {
+	allSocialAccounts {
+		username
+		email
+		accountType
+		prettyName
+		id
+		createdBy {
+			id
+			username
+			organisation {
+				id
+				name
+			}
+		}
+		facebookPages {
+      		id
+      		name
+    	}
+		hootsuiteProfiles {
+			...HootSuiteProfileFragment
+		}
+		tokenExpiresAt
+	}
+}
+
+mutation registerSocialAccount($params: SocialRegistrationInput!) {
+  registerSocialAccount(params: $params) {
+    errors
+    success
+    data {
+      authorizeUrl
+    }
+  }
+}
+
+mutation deleteSocialAccount($id: ID) {
+  deleteSocialAccount(id: $id) {
+    errors
+    success
+  }
+}

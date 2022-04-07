@@ -1,0 +1,65 @@
+<dm-page-header title="Reviews"> </dm-page-header>
+<div id="reviews-list" *ngIf="reviews$ | async as data; else loading">
+	<ng-container *ngIf="data.length; else noItems">
+		<div class="reviews-list__totals">
+			<div *ngIf="data.length">
+				<span class="reviews-list__count">{{ data.length }}</span> disruption{{ data.length != 1 ? 's' : '' }}
+			</div>
+		</div>
+		<a *ngFor="let disruption of data" class="reviews-list__item" [routerLink]="['/disruption/', disruption.id]">
+			<div class="reviews-list__content">
+				<div class="reviews-list__id">{{ disruption.id }}</div>
+				<div class="reviews-list__description">
+					<div class="reviews-list__title">{{ disruption.title }}</div>
+					<div>
+						<span class="reviews-list__mode">Disruption to {{ disruption.serviceModes }}</span>
+						<span *ngIf="disruption.networkWide" class="reviews-list__network">
+							Network affected -
+						</span>
+						<span class="reviews-list__operators-count">
+							{{ disruption.operatorsCount }} operator{{
+								disruption.operatorsCount == 1 ? '' : 's'
+							}}
+						</span>
+						<span class="reviews-list__services-count">
+							{{ disruption.servicesAffectedCount }} service{{
+								disruption.servicesAffectedCount == 1 ? '' : 's'
+							}}
+						</span>
+						<span class="reviews-list__stops-count">
+							{{ disruption.stopsAffectedCount }} stop{{ disruption.stopsAffectedCount == 1 ? '' : 's' }}
+						</span>
+					</div>
+					<div class="reviews-list__submitted">
+						<span class="reviews-list__label">Submitted by: </span>
+						<span class="reviews-list__creator">{{ disruption.createdBy }}</span>
+						<span class="reviews-list__created-date">{{ disruption.createdDate }}</span>
+					</div>
+				</div>
+				<div class="reviews-list__meta">
+					<div class="reviews-list__dates">{{ disruption.startDate }} - {{ disruption.endDate }}</div>
+					<div class="reviews-list__severity">Severity: {{ disruption.severity }}</div>
+				</div>
+			</div>
+		</a>
+	</ng-container>
+	<ng-template #noItems>Nothing to review.</ng-template>
+</div>
+<ng-template #loading>
+	<div class="reviews-list__skeleton">
+		<div class="reviews-list__skeleton-left"></div>
+		<div class="reviews-list__skeleton-right"></div>
+	</div>
+	<div class="reviews-list__skeleton">
+		<div class="reviews-list__skeleton-left"></div>
+		<div class="reviews-list__skeleton-right"></div>
+	</div>
+	<div class="reviews-list__skeleton">
+		<div class="reviews-list__skeleton-left"></div>
+		<div class="reviews-list__skeleton-right"></div>
+	</div>
+	<div class="reviews-list__skeleton">
+		<div class="reviews-list__skeleton-left"></div>
+		<div class="reviews-list__skeleton-right"></div>
+	</div>
+</ng-template>

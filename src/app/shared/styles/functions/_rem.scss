@@ -1,0 +1,6 @@
+@function rem($pxval) {
+  @if not unitless($pxval) {
+    $pxval: strip-units($pxval);
+  }
+  @return ($pxval / $global-type-unit) * 1rem;
+}

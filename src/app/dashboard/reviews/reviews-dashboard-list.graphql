@@ -1,0 +1,23 @@
+query reviewsDashboardList {
+	allDisruptions(status: DraftPendingApproval, sortBy: validity_period_start_date_reversed, first: 5) {
+		totalCount
+		edges {
+			node {
+				id
+				title
+			}
+		}
+	}
+}
+
+query recentlyClosed {
+	recentlyClosed {
+		totalCount
+		edges {
+			node {
+				id
+				title
+			}
+		}
+	}
+}

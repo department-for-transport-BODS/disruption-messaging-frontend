@@ -1,0 +1,86 @@
+<dm-page-header title="{{ title }}">
+	<dm-button *ngIf="!isTemplates" appearance="primary" btnId="disruptions-add" [route]="['/disruption/edit']"
+		>Add new</dm-button
+	>
+	<dm-button *ngIf="isTemplates" appearance="primary" btnId="disruptions-add" [route]="['/disruption/edit/template']"
+		>Add new template</dm-button
+	>
+</dm-page-header>
+<div class="disruptions__controls">
+	<dm-disruptions-filter (filtersChanged)="onFilterChanged($event)"></dm-disruptions-filter>
+	<div>
+	  <div class="disruptions__display-mode" id="display-display-mode">
+	  	<div *ngIf="currentView === 'list' && exportService.data.length > 0" class="disruptions__view-table">
+	  		<dm-button
+	  			(onClick)="exportClicked = !exportClicked"
+	  			appearance="minimal"
+	  			id="export-disruption-list"
+	  			type="button"
+	  		>
+	  			Export
+	  		</dm-button>
+	  	</div>
+	  	<div class="disruptions__view-list">
+	  		<dm-icon-button
+	  			(onClick)="currentView = 'list'"
+	  			[active]="currentView == 'list'"
+	  			accessibilitylabel="View disruptions in a table"
+	  			icon="table"
+	  			btnId="display-mode-list"
+	  			size="md"
+	  		></dm-icon-button>
+	  	</div>
+	  	<div class="disruptions__view-list">
+	  		<dm-icon-button
+	  			(onClick)="currentView = 'map'"
+	  			[active]="currentView == 'map'"
+	  			accessibilitylabel="View disruptions on a map"
+	  			icon="map"
+	  			btnId="display-mode-map"
+	  			size="md"
+	  		></dm-icon-button>
+	  	</div>
+	  </div>
+	  	<div *ngIf="exportClicked && currentView === 'list' && exportService.data.length > 0"
+			 class="export"
+			 id="export-options">
+			<div class="export__view-list">
+				<dm-export-csv [exportAllCsv]="exportAll"></dm-export-csv>
+			</div>
+  			<div class="export__view-list">
+  				<dm-export-excel [exportAllExcel]="exportAll"></dm-export-excel>
+  			</div>
+			<div class="export__view-list">
+  				<dm-export-pdf [exportAllPdf]="exportAll"></dm-export-pdf>
+  			</div>
+		</div>
+		<div class="export">
+	<div *ngIf="exportClicked && currentView === 'list' && exportService.data.length > 0"
+		class="form__checkbox"
+			id="export-all">
+							<input class="form__checkbox-input"
+							type="checkbox"
+							[(ngModel)]="exportAll"
+							[ngModelOptions]="{standalone: true}"
+							(onClick)="exportAll = !exportAll"
+							id="exportall"/> <label class="form__label" for="exportall">Detailed export</label>
+							</div>
+							</div></div>
+</div>
+
+<div [ngSwitch]="currentView">
+	<dm-disruptions-map
+		(iconClick)="onMapClick($event)"
+		*ngSwitchCase="'map'"
+		[data]="mapData$ | async"
+		style="width: 100%; height: 80vh"
+	></dm-disruptions-map>
+	<dm-disruptions-grid
+		#tableComponent
+		(rowSelected)="showDisruption($event)"
+		*ngSwitchDefault
+		[dataSource]="tableDataSource"
+	></dm-disruptions-grid>
+</div>
+
+<dm-disruption-preview></dm-disruption-preview>

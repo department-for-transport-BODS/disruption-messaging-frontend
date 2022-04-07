@@ -1,0 +1,204 @@
+mutation createDisruption($params: DisruptionCreateInput!) {
+	createDisruption(params: $params) {
+		success
+		errors
+		data {
+			id
+			title
+			isTemplate
+			description
+			link
+			type
+			reason
+			relatedDisruption {
+				edges {
+					node {
+						id
+						title
+					}
+				}
+			}
+			publishingStart
+			publishingEnd
+			impact {
+				edges {
+					node {
+						id
+						mode
+						advice
+						journeyPlanner
+						direction
+						delay
+						severity
+						operators {
+							edges {
+								node {
+									id
+									ref
+									name
+								}
+							}
+						}
+						lines {
+							edges {
+								node {
+									id
+									ref
+									name
+								}
+							}
+						}
+						stops {
+							edges {
+								node {
+									id
+									commonName
+									atcoCode
+									type
+									ref
+									latitude
+									longitude
+								}
+							}
+						}
+					}
+				}
+			}
+			isOpenEnded
+			validityPeriod {
+				id
+				startDate
+				endDate
+				startTime
+				endTime
+				repetition
+				finalDate
+			}
+			socialMessages {
+				id
+				socialAccount {
+					...SocialAccountFragment
+				}
+				hootsuiteProfile {
+					...HootSuiteProfileFragment
+				}
+				publishOn
+				message
+				image {
+					name
+					url
+				}
+				published
+				publishedOn
+				lastPublishError
+			}
+			modified
+		}
+	}
+}
+
+mutation submitDisruption($id: ID, $comment: String) {
+	submitDisruption(id: $id, comment: $comment) {
+		success
+		errors
+	}
+}
+
+mutation updateDisruption($id: ID, $params: DisruptionUpdateInput!) {
+	updateDisruption(id: $id, params: $params) {
+		success
+		errors
+		data {
+			id
+			title
+			isTemplate
+			description
+			link
+			type
+			reason
+			relatedDisruption {
+				edges {
+					node {
+						id
+						title
+					}
+				}
+			}
+			publishingStart
+			publishingEnd
+			impact {
+				edges {
+					node {
+						id
+						mode
+						advice
+						journeyPlanner
+						delay
+						severity
+						direction
+						operators {
+							edges {
+								node {
+									id
+									ref
+									name
+								}
+							}
+						}
+						lines {
+							edges {
+								node {
+									id
+									ref
+									name
+								}
+							}
+						}
+						stops {
+							edges {
+								node {
+									id
+									commonName
+									atcoCode
+									type
+									ref
+									latitude
+									longitude
+								}
+							}
+						}
+					}
+				}
+			}
+			isOpenEnded
+			validityPeriod {
+				id
+				startDate
+				endDate
+				startTime
+				endTime
+				repetition
+				finalDate
+			}
+			socialMessages {
+				id
+				socialAccount {
+					...SocialAccountFragment
+				}
+				hootsuiteProfile {
+					...HootSuiteProfileFragment
+				}
+				publishOn
+				message
+				image {
+					name
+					url
+				}
+				published
+				publishedOn
+				lastPublishError
+			}
+			modified
+		}
+	}
+}

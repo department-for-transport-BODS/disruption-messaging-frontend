@@ -1,0 +1,21 @@
+// spacing units based on the global rhythm defined as $global-spacing-unit
+
+$spacing-sizes: (
+	xs: $global-spacing-unit/2,
+	sm: $global-spacing-unit,
+	md: $global-spacing-unit * 2,
+	lg: $global-spacing-unit * 3,
+	xl: $global-spacing-unit * 4
+);
+
+$spacing-xs: (map-get($spacing-sizes, 'xs') / $global-type-unit) * 1rem !default;
+$spacing-sm: (map-get($spacing-sizes, 'sm') / $global-type-unit) * 1rem !default;
+$spacing-md: (map-get($spacing-sizes, 'md') / $global-type-unit) * 1rem !default;
+$spacing-lg: (map-get($spacing-sizes, 'lg') / $global-type-unit) * 1rem !default;
+$spacing-xl: (map-get($spacing-sizes, 'xl') / $global-type-unit) * 1rem !default;
+
+$spacing-xs-withborder: ((map-get($spacing-sizes, 'xs')-1) / $global-type-unit) * 1rem !default;
+$spacing-sm-withborder: ((map-get($spacing-sizes, 'sm')-1) / $global-type-unit) * 1rem !default;
+$spacing-md-withborder: ((map-get($spacing-sizes, 'md')-1) / $global-type-unit) * 1rem !default;
+$spacing-lg-withborder: ((map-get($spacing-sizes, 'lg')-1) / $global-type-unit) * 1rem !default;
+$spacing-xl-withborder: ((map-get($spacing-sizes, 'xl')-1) / $global-type-unit) * 1rem !default;

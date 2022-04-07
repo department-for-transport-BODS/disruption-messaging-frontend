@@ -1,0 +1,59 @@
+<ngx-smart-modal
+	id="notifications-modal"
+	[identifier]="'notificationsModal'"
+	[closable]="false"
+	[escapable]="false"
+	[dismissable]="false"
+	[autostart]="true"
+	customClass="nsm-dialog-animation-fade nsm-dialog-narrow"
+>
+	<div id="settings-form-container" *ngIf="settings.length; else noItems" class="form">
+		<h2>Notification Settings</h2>
+		<ng-container>
+			<div class="form" [formGroup]="settingsForm">
+				<fieldset class="form__group">
+					<div formArrayName="settings" *ngFor="let item of settings.controls; let i = index" class="">
+						<div [formGroupName]="i" class="form__group">
+							<label class="form_label">{{ description(item.value.setting) }}</label>
+							<div class="form__checkbox">
+								<input
+									id="email-{{ i }}"
+									type="checkbox"
+									class="form__checkbox-input"
+									formControlName="email"
+								/>
+								<label for="email-{{ i }}" class="form__label">Emails</label>
+							</div>
+							<div class="form__checkbox">
+								<input
+									id="inapp-{{ i }}"
+									type="checkbox"
+									class="form__checkbox-input"
+									formControlName="inApp"
+								/>
+								<label for="inapp-{{ i }}" class="form__label">In app</label>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+			<dm-banner *ngIf="notificationSettingsService.errors$ | async as errors; else success" appearance="error">{{
+				errors
+			}}</dm-banner>
+			<ng-template #success>
+				<dm-banner *ngIf="notificationSettingsService.serverResponse$ | async" appearance="success">
+					Update settings successful.
+				</dm-banner>
+			</ng-template>
+			<div class="form__actions">
+				<dm-button-group justify="right">
+					<dm-button btnId="notifications-change-modal-cancel" (onClick)="this.onClose()">Close</dm-button>
+					<dm-button appearance="primary" id="notifications-change-modal-submit" (onClick)="onSubmit()"
+						>Submit
+					</dm-button>
+				</dm-button-group>
+			</div>
+		</ng-container>
+	</div>
+	<ng-template #noItems><dm-card-body>Failed to get notification settings.</dm-card-body></ng-template>
+</ngx-smart-modal>

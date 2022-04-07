@@ -1,0 +1,322 @@
+<h2 class="impact-form__title">{{ title }}</h2>
+<dm-banner class="impact-form__warning" *ngIf="missingReferenceWarning" appearance="warning">{{ missingReferenceWarning }}</dm-banner>
+<div [formGroup]="impactGroup" class="form grid">
+	<div
+		[ngClass]="{ 'impact-form__choice--chosen': modeIsSet }"
+		class="grid__row impact-form__choice impact-form__choice--tall"
+	>
+		<div class="impact-form__option-label form__label grid__col--xs-12 grid__col--md-3">
+			Select a mode of transport:
+		</div>
+
+		<div class="impact-form__option-set grid__col--xs-12 grid__col--md-auto">
+			<button
+				class="impact-form__option"
+				[ngClass]="{ 'impact-form__option--active': modeIsSet && selectedMode === mode.value }"
+				type="button"
+				*ngFor="let mode of allModes let i = index"
+				(click)="setMode(mode.value)"
+				#modeButton
+				[style.left.px]="modeIsSet && selectedMode === mode.value ? 8 : offsetMode(i)"
+				[attr.disabled]="modeIsSet && selectedMode === mode.value ? 'true' : null"
+				[attr.id]="'impact-mode-' + i"
+			>
+				<span class="impact-form__icon">
+					<svg-icon src="assets/icons/{{ mode.value | lowercase }}.svg"></svg-icon>
+				</span>
+				{{ mode.title }}
+			</button>
+		</div>
+		<div class="impact-form__option-clear grid__col--xs-12 grid__col--md-auto" *ngIf="modeIsSet">
+			<dm-button appearance="minimal" (onClick)="clearMode()">Change</dm-button>
+		</div>
+	</div>
+	<div
+		[ngClass]="{ 'impact-form__choice--chosen': typeIsSet }"
+		class="grid__row impact-form__choice"
+		*ngIf="modeIsSet"
+	>
+		<div class="impact-form__option-label form__label grid__col--xs-12 grid__col--md-3">Select impact type:</div>
+		<div class="impact-form__option-set grid__col--xs-12 grid__col--md-auto">
+			<button
+				class="impact-form__option"
+				[ngClass]="{ 'impact-form__option--active': typeIsSet && selectedType == impactType.value }"
+				type="button"
+				*ngFor="let impactType of impactTypes; let i = index"
+				#typeButton
+				(click)="setType(impactType.value)"
+				[style.left.px]="typeIsSet && selectedType == impactType.value ? 8 : offsetType(i)"
+				[attr.disabled]="typeIsSet && selectedType == impactType.value ? 'true' : null"
+				[attr.id]="'impact-type-' + i"
+			>
+				{{ impactType.title }}
+			</button>
+		</div>
+		<div class="impact-form__option-clear grid__col--xs-12 grid__col--md-auto" *ngIf="typeIsSet">
+			<dm-button appearance="minimal" (onClick)="clearType()">Change</dm-button>
+		</div>
+	</div>
+
+	<div *ngIf="modeIsSet" [ngSwitch]="true">
+		<div *ngSwitchCase="selectedType === 'Operator'">
+			<div
+				class="impact-form__choice grid__row form__group"
+				[ngClass]="{ 'form__group--error': hasError('operators') }"
+			>
+				<label
+					class="impact-form__option-label form__label grid__col--xs-12 grid__col--md-3"
+					for="impact-operators"
+					>Operators</label
+				>
+				<div id="impact-operators" class="impact-form__option-controls grid__col--xs-12 grid__col--md-9">
+					<ng-select
+						class="ng-select-impact"
+						[items]="operatorList"
+						bindLabel="name"
+						[loading]="loadingOperators"
+						placeholder="Operators"
+						formControlName="operators"
+						[multiple]="true"
+						[hideSelected]="true"
+					>
+					</ng-select>
+					<div class="form__validation" *ngIf="hasError('operators')">
+						<div class="form__feedback form__feedback--error">
+							This field is required.
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div *ngSwitchCase="selectedType === 'Service'">
+			<div
+				class="impact-form__choice grid__row form__group"
+				[ngClass]="{ 'form__group--error': hasError('lines') }"
+			>
+				<label
+					class="impact-form__option-label form__label grid__col--xs-12 grid__col--md-3"
+					for="impact-lines"
+					>Services</label
+				>
+				<div
+					id="impact-lines"
+					class="impact-form__option-controls grid__col--xs-12 grid__col--md-9"
+					>
+					<ng-select
+						class="ng-select-impact"
+						[items]="allLines$ | async"
+						bindLabel="featureName"
+						[trackByFn]="trackAutocompleteSelection"
+						[loading]="loadingLines"
+						[multiple]="true"
+						[hideSelected]="true"
+						(add)="addService($event)"
+						(remove)="removeService($event)"
+						[clearable]="false"
+						placeholder="Services"
+						formControlName="lines"
+					>
+					</ng-select>
+					<div class="form__validation" *ngIf="hasError('lines')">
+						<div class="form__feedback form__feedback--error">
+							This field is required.
+						</div>
+					</div>
+				</div>
+			</div>
+			<div
+				*ngIf="selectedType === 'Service' && operators.value.length"
+				class="grid__row form__group impact-form__operators"
+				[ngClass]="{ 'form__group--error': hasError('operators') }"
+				>
+				<label
+					class="form__label grid__col--xs-12 grid__col--md-3"
+					for="impact-line-operators"
+					>Operators</label
+				>
+				<div
+					id="impact-line-operators"
+					class="impact-form__option-controls grid__col--xs-12 grid__col--md-9"
+					>
+					<ng-select
+						class="ng-select-impact ng-select-operators"
+						*ngSwitchCase="selectedType === 'Service'"
+						[items]="[]"
+						bindLabel="name"
+						[multiple]="true"
+						[hideSelected]="true"
+						formControlName="operators"
+						[loading]="loadingOperators"
+						[clearable]="false"
+						[searchable]="false"
+					>
+					</ng-select>
+				</div>
+			</div>
+		</div>
+		<div
+			*ngSwitchCase="selectedType === 'Stops' || selectedType === 'Service'"
+			class="form__group impact-form__choice grid__row"
+			[ngClass]="{ 'form__group--error': hasError('stops') }"
+			>
+			<label class="impact-form__option-label form__label grid__col--xs-12 grid__col--md-3">
+				Stops
+			</label>
+			<div class="impact-form__option-controls grid__col--xs-12 grid__col--md-9">
+				<ng-select
+					*ngSwitchCase="selectedType === 'Stops'"
+					class="ng-select-impact"
+					[items]="allStops$ | async"
+					bindLabel="displayName"
+					[multiple]="true"
+					[hideSelected]="true"
+					formControlName="stops"
+					[loading]="autocompleteStopsLoading"
+					[typeahead]="autocompleteStopsInput$"
+				>
+				</ng-select>
+				<ng-select
+					class="ng-select-impact"
+					*ngSwitchCase="selectedType === 'Service'"
+					[items]="stopList"
+					bindLabel="displayName"
+					[multiple]="true"
+					[hideSelected]="true"
+					[loading]="loadingStops"
+					formControlName="stops"
+					(add)="onStopAdded($event)"
+				>
+				</ng-select>
+				<div class="form__validation" *ngIf="hasError('stops')">
+					<div class="form__feedback form__feedback--error">
+						This field is required.
+					</div>
+				</div>
+			</div>
+		</div>
+		<div
+			*ngSwitchCase="selectedType === 'Service'"
+			class="grid__row"
+			>
+			<dm-impact-map
+				[impactType]="1"
+				class="impact-map"
+			></dm-impact-map>
+		</div>
+		<div
+			*ngSwitchCase="selectedType === 'Stops'"
+			class="grid__col--xs-12 grid__col--md-auto"
+			>
+			<dm-impact-map
+				[impactType]="2"
+				class="impact-map"
+			></dm-impact-map>
+		</div>
+		<div
+			*ngSwitchCase="typeIsSet"
+			class="impact-form__details-container"
+			>
+			<div
+				class="impact-form__details grid__col--xs-12 grid__col--md-auto grid__col--xs-offset-3"
+				>
+				<div class="form__group" [ngClass]="{ 'form__group--error': propInvalid('advice') }">
+					<label class="form__label" for="impact-advice">Advice</label>
+					<textarea
+						id="impact-advice"
+						class="form__control"
+						formControlName="advice"
+						></textarea>
+					<div class="form__validation" *ngIf="propInvalid('advice')">
+						<div class="form__feedback form__feedback--error" *ngIf="advice.errors.required">
+							This field is required.
+						</div>
+						<div class="form__feedback form__feedback--error" *ngIf="advice.errors.maxlength">
+							Advice must be no more than 1000 characters
+						</div>
+						<div class="form__feedback form__feedback--error" *ngIf="advice.errors.profanity">
+							Please refrain from using profane words in text.
+						</div>
+						<div class="form__feedback form__feedback--error" *ngIf="advice.errors.nonAscii">
+							Non-printable character <i>{{advice.errors.nonAscii}}</i> is not allowed.
+						</div>
+					</div>
+				</div>
+				<fieldset class="form__group" [ngClass]="{ 'form__group--error': propInvalid('journeyPlanners') }">
+					<legend class="form__label" for="impact-journeyPlanner">Remove from journey planners?</legend>
+					<div class="form__control-group">
+						<div class="form__radio">
+							<input
+								class="form__radio-input"
+								id="impact-journey-planners-yes"
+								type="radio"
+								formControlName="journeyPlanners"
+								value="true"
+							/>
+							<label class="form__label" for="impact-journey-planners-yes">Yes</label>
+						</div>
+						<div class="form__radio">
+							<input
+								class="form__radio-input"
+								type="radio"
+								id="impact-journey-planners-no"
+								formControlName="journeyPlanners"
+								value="false"
+							/>
+							<label class="form__label" for="impact-journey-planners-no">No</label>
+						</div>
+					</div>
+					<div class="form__validation" *ngIf="propInvalid('journeyPlanners')">
+						<div class="form__feedback form__feedback--error">
+							This field is required.
+						</div>
+					</div>
+				</fieldset>
+				<div class="form__group" [ngClass]="{ 'form__group--error': propInvalid('delay') }">
+					<label class="form__label" for="impact-delay">Delay (minutes)</label>
+					<input id="impact-delay" class="form__control" type="number" formControlName="delay" />
+					<div class="form__validation" *ngIf="propInvalid('delay') && delay.errors.min">
+						<div class="form__feedback form__feedback--error">
+							Minimum allowed delay is 0.
+						</div>
+					</div>
+					<div class="form__validation" *ngIf="propInvalid('delay') && delay.errors.max">
+						<div class="form__feedback form__feedback--error">
+							Maximum allowed delay is 32767.
+						</div>
+					</div>
+				</div>
+				<div class="form__group" [ngClass]="{ 'form__group--error': propInvalid('severity') }">
+					<label class="form__label" for="impact-severity">Severity</label>
+					<select id="impact-severity" class="form__control" formControlName="severity">
+						<option *ngFor="let severity of severities" [ngValue]="severity.value">
+							{{ severity.title }}
+						</option>
+					</select>
+					<div class="form__validation" *ngIf="propInvalid('severity')">
+						<div class="form__feedback form__feedback--error">
+							This field is required.
+						</div>
+					</div>
+				</div>
+				<div *ngSwitchCase="selectedType === 'Service'" class="form__group">
+					<label class="form__label" for="impact-direction">Direction</label>
+					<select id="impact-direction" class="form__control" formControlName="direction">
+						<option *ngFor="let direction of directions" [ngValue]="direction.value">
+							{{ direction.title }}
+						</option>
+					</select>
+				</div>
+			</div>
+			<div *ngSwitchCase="selectedType === 'Location'"></div>
+
+			<div class="impact-form__actions form__actions">
+				<div class="impact-form__cancel">
+					<dm-button btnId="impact-add-cancel" (onClick)="onCancel()">Cancel</dm-button>
+				</div>
+				<div class="impact-form__ok">
+					<dm-button btnId="impact-add-OK" appearance="primary" (onClick)="onOK()">OK</dm-button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

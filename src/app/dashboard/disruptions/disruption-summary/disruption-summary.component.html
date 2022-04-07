@@ -1,0 +1,39 @@
+<div class="summary">
+	<div class="summary__id">{{ data.id }}</div>
+	<div class="summary__content">
+		<h4 class="summary__title">
+			<a [routerLink]="['/disruption/', data.id]">{{ data.title }}</a>
+		</h4>
+		<div class="summary__description">
+			<span *ngIf="data.networkWide">Network wide impact</span>
+			<span *ngIf="data.networkWide && data.operatorCount"> - </span>
+			<span *ngIf="data.operatorCount">
+				{{ data.operatorCount }} affected operator{{
+					data.operatorCount > 1 ? 's' : null
+				}}
+			</span>
+			<span *ngIf="data.servicesAffectedCount"
+				>{{ data.servicesAffectedCount }} affected service{{
+					data.servicesAffectedCount > 1 ? 's' : null
+				}}</span
+			>
+			<span *ngIf="data.stopsAffectedCount && data.servicesAffectedCount"
+				>, {{ data.stopsAffectedCount }} affected stop{{ data.stopsAffectedCount > 1 ? 's' : null }}</span
+			>
+			<span *ngIf="data.stopsAffectedCount && !data.servicesAffectedCount"
+				>{{ data.stopsAffectedCount }} affected stop{{ data.stopsAffectedCount > 1 ? 's' : null }}</span
+			>
+		</div>
+		<div class="summary__dates-severity">
+			<div class="summary__dates" *ngIf="data.startDate != data.endDate">
+				{{ data.startDate }} - {{ data.endDate }}
+			</div>
+			<div class="summary__dates" *ngIf="data.startDate === data.endDate">
+				{{ data.startDate }}
+			</div>
+			<div class="summary__severity">
+				{{ data.severity }}
+			</div>
+		</div>
+	</div>
+</div>

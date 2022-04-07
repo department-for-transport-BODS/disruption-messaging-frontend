@@ -1,0 +1,57 @@
+@mixin skeleton(
+	$lines: 2,
+	$line-height: 24px,
+	$line-gap: 8px,
+	$background: $mist,
+	$shimmer: rgba(255, 255, 255, 0.6),
+	$speed: 3s,
+	$max-width: none,
+	$min-width: auto
+) {
+	$key: unique-id();
+	$background-images: ();
+	$background-sizes: ();
+	$background-positions: ();
+	$background-blend-modes: ();
+	// shimmer element
+	$background-images: append(
+		$background-images,
+		linear-gradient(115deg, transparent 20%, $shimmer 50%, transparent 80%),
+		comma
+	);
+	$background-sizes: append($background-sizes, 50% 100%, comma);
+	$background-positions: append($background-positions, -60% 0, comma);
+
+	@for $i from 1 through $lines {
+		$background-images: append($background-images, linear-gradient($background 0%, $background 100%), comma);
+		$background-positions: append(
+			$background-positions,
+			0 (($i * $line-gap/2) + (($i - 1) * ($line-height + $line-gap/2)))
+		);
+
+		@if $i!=$lines or $lines==1 {
+			$background-sizes: append($background-sizes, 100% $line-height, comma);
+		} @else {
+			$background-sizes: append($background-sizes, random(4) * 23% $line-height, comma);
+		}
+	}
+	$background-positions-animated: set-nth($background-positions, 1, 180% 0);
+
+	&:empty {
+		display: block;
+		width: 100%;
+		min-height: ($lines * ($line-height + $line-gap));
+		max-width: $max-width;
+		min-width: $min-width;
+		background-image: $background-images;
+		background-position: $background-positions;
+		background-size: $background-sizes;
+		background-repeat: no-repeat;
+		animation: skeleton-shimmer-#{$key} $speed infinite;
+	}
+	@keyframes skeleton-shimmer-#{$key} {
+		to {
+			background-position: $background-positions-animated;
+		}
+	}
+}

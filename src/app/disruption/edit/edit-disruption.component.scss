@@ -1,0 +1,63 @@
+@import 'src/app/shared/styles/variables/variables';
+@import 'src/app/shared/styles/functions/functions';
+
+.edit {
+	&__nav {
+		display: flex;
+		justify-content: space-between;
+		margin-top: $spacing-xl;
+		max-width: 100%;
+		//padding-top: $spacing-md-withborder;
+		//border-top: 1px solid $mist;
+	}
+	&__nav-section {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		align-items: center;
+		&__button {
+			width: 100%;
+		}
+		&__buttons-right {
+			margin-top: $spacing-md;
+			width: 100%;
+
+		}
+	}
+	&__nav-back {
+		margin-right: $spacing-md;
+	}
+	&__messages {
+		margin-top: $spacing-md;
+		position: sticky;
+		bottom: 20px;
+		animation: messagesEnter 0.5s ease-in-out;
+		animation-fill-mode: forwards;
+		box-shadow: 0 2px 8px rgba($shade, 0.1);
+		&:empty {
+			display: none;
+		}
+	}
+}
+
+@keyframes messagesEnter {
+	from {
+		transform: translate3d(0, -100%, 0);
+		opacity: 0;
+	}
+	from {
+		transform: translate3d(0, 0, 0);
+		opacity: 1;
+	}
+}
+
+@include bp($tablet) {
+	.edit {
+		&__nav-section {
+			&__buttons-right {
+				max-width: rem(250);
+				margin-top: 0;
+			}
+		}
+	}
+}

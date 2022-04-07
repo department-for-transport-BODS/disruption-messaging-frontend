@@ -1,0 +1,35 @@
+<dm-button-group justify="right">
+	<dm-button *ngIf="id" id="reject-disruption" (click)="onRejectButton()">Reject</dm-button>
+	<dm-button *ngIf="id" id="approve-disruption" appearance="primary" (click)="onApproveButton()">Approve</dm-button>
+</dm-button-group>
+
+<ngx-smart-modal customClass="modal" identifier="approve-modal" *ngIf="id" (onAnyCloseEvent)="resetState()">
+	<dm-spinner name="approve-disruption" [show]="disruptionReviewService.loading$ | async"></dm-spinner>
+	<div [ngSwitch]="status">
+		<div *ngSwitchCase="'approve'" class="form">
+			<h1>Approve disruption</h1>
+			<p>Are you sure you want to publish this disruption?</p>
+			<dm-button-group justify="right">
+				<dm-button btnId="disruption-approve-cancel" (onClick)="onCancel()">Cancel</dm-button>
+				<dm-button btnId="disruption-approve-OK" (onClick)="onApprove()">OK</dm-button>
+			</dm-button-group>
+		</div>
+		<div *ngSwitchCase="'reject'" class="form">
+			<h1>Reject disruption</h1>
+			<div class="form__group">
+				<label class="form__label">Please say why:</label>
+				<textarea id="reject-disruption-modal-comment" class="form__control" [(ngModel)]="comments"></textarea>
+			</div>
+			<dm-button-group justify="right">
+				<dm-button btnId="disruption-reject-cancel" (onClick)="onCancel()">Cancel</dm-button>
+				<dm-button btnId="disruption-reject-OK" (onClick)="onReject()">OK</dm-button>
+			</dm-button-group>
+		</div>
+		<div *ngSwitchCase="'error'">
+			<h1>An error occured</h1>
+			<p>The disruption could not be modified. Server reported the following error:</p>
+			<p class="error">{{ serverErrors }}</p>
+			<dm-button btnId="disruption-delete-close-errors" (onClick)="onComplete()">Close</dm-button>
+		</div>
+	</div>
+</ngx-smart-modal>

@@ -1,0 +1,14 @@
+<div class="popover">
+	<dm-button
+		(onClick)="toggleDropdown()"
+		[accessibilityExpanded]="isOpen"
+		[accessibilityLabel]="triggerAccessibilityLabel"
+		[appearance]="triggerButtonAppearance"
+		[iconBefore]="triggerIcon"
+		[size]="triggerButtonSize"
+		>{{ triggerLabel }}</dm-button
+	>
+	<div class="popover__dropdown " *ngIf="isOpen">
+		<ng-content></ng-content>
+	</div>
+</div>

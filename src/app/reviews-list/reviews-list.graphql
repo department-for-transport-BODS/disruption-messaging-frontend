@@ -1,0 +1,61 @@
+query reviewsList {
+	allDisruptions(status: DraftPendingApproval, sortBy: validity_period_start_date_reversed) {
+		totalCount
+		edges {
+			node {
+				id
+				title
+				description
+				severity
+				status
+				created
+				createdBy {
+					id
+					username
+				}
+				impact {
+					edges {
+						node {
+							id
+							name
+							allOperators
+							severity
+							mode
+							operators {
+								edges {
+									node {
+										id
+										name
+									}
+								}
+							}
+							lines {
+								edges {
+									node {
+										id
+										name
+									}
+								}
+							}
+							stops {
+								edges {
+									node {
+										id
+										commonName
+									}
+								}
+							}
+						}
+					}
+				}
+				validityPeriod {
+					startDate
+					startTime
+					endDate
+					endTime
+					finalDate
+				}
+			}
+		}
+	}
+}

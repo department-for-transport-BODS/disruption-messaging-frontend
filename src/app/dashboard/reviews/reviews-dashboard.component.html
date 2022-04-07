@@ -1,0 +1,91 @@
+<dm-card id="dashboard-alerts">
+	<dm-card-header>Alerts</dm-card-header>
+	<div class="alerts-dashboard__container">
+		<div class="alerts-dashboard__reviews"
+			 *ngIf="reviews$ | async as data; else reviewsLoading">
+			<div class="alerts-dashboard__header-container">
+				<h4 class="alerts-dashboard__header">
+					<svg-icon src="assets/icons/list-check.svg"
+							  class="alerts-dashboard__icon"></svg-icon>
+					<span class="alerts-dashboard__header-text">Awaiting review({{ reviewsCount }})</span>
+				</h4>
+				<dm-button
+					btnId="reviews-dashboard-view-all"
+					size="xs"
+					appearance="primary"
+					[routerLink]="['/reviews/']"
+					class="alerts-dashboard__button"
+				>View all
+				</dm-button>
+			</div>
+			<div class="alerts-dashboard__list-container">
+				<ul class="alerts-dashboard__list" *ngIf="reviewsCount > 0; else noReviews">
+					<li *ngFor="let disruption of data; let i = index" class="alerts-dashboard__item">
+						<div class="alerts-dashboard__id">
+							{{ disruption.id }}
+						</div>
+						<div class="alerts-dashboard__title">
+							<a
+								[routerLink]="['/disruption/', disruption.id]"
+								id="reviews-item-{{ i }}"
+								class="alerts-dashboard__link"
+							>
+								{{ disruption.title }}
+							</a>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<ng-template #noReviews>
+				<span class="alerts-dashboard__list alerts-dashboard__item">
+					<i>You have nothing to review!</i>
+				</span>
+			</ng-template>
+		</div>
+		<ng-template #reviewsLoading>
+			<div class="alerts-dashboard__skeleton">
+				<div class="alerts-dashboard__skeleton-left"></div>
+				<div class="alerts-dashboard__skeleton-right"></div>
+			</div>
+		</ng-template>
+		<div class="alerts-dashboard__closed"
+			 *ngIf="recentlyClosed$ | async as data; else closedLoading">
+			<div class="alerts-dashboard__header-container">
+				<h4 class="alerts-dashboard__header">
+					<svg-icon src="assets/icons/list-check.svg"
+							  class="alerts-dashboard__icon"></svg-icon>
+					Recently closed <span
+					class="alerts-dashboard-list__count">({{ recentlyClosedCount }})</span>
+				</h4>
+			</div>
+			<ul class="alerts-dashboard__list" *ngIf="recentlyClosedCount > 0; else noClosed">
+				<li class="alerts-dashboard__item"
+					*ngFor="let disruption of data; let i = index">
+					<div class="alerts-dashboard__id">
+						{{ disruption.id }}
+					</div>
+					<div class="alerts-dashboard__title">
+						<a
+							[routerLink]="['/disruption/', disruption.id]"
+							id="recently-closed-dashboard-item-{{ i }}"
+							class="alerts-dashboard__link"
+						>
+							{{ disruption.title }}
+						</a>
+					</div>
+				</li>
+			</ul>
+			<ng-template #noClosed>
+				<span class="alerts-dashboard__list alerts-dashboard__item">
+					<i>No disruptions closed in the last 24 hours.</i>
+				</span>
+			</ng-template>
+		</div>
+		<ng-template #closedLoading>
+			<div class="alerts-dashboard__skeleton">
+				<div class="alerts-dashboard__skeleton-left"></div>
+				<div class="alerts-dashboard__skeleton-right"></div>
+			</div>
+		</ng-template>
+	</div>
+</dm-card>

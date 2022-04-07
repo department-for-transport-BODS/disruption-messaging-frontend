@@ -1,0 +1,101 @@
+<div id="user-form-container" class="form">
+	<h2>{{ modalTitle }}</h2>
+	<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+		<div *ngIf="user" class="form__group" [ngClass]="{ 'form__group--error': hasError('username') }">
+			<label class="form__label" for="user-username">Username:</label>
+			<input id="user-username" class="form__control" type="text" formControlName="username" />
+		</div>
+		<div class="form__group" [ngClass]="{ 'form__group--error': hasError('email') }">
+			<label class="form__label" for="user-email">Email:</label>
+			<input id="user-email" class="form__control" type="text" formControlName="email" />
+			<div *ngIf="hasError('email')" class="form__validation">
+				<div *ngIf="email.errors.required" class="form__feedback form__feedback--error">
+					Email address is required
+				</div>
+				<div *ngIf="email.errors.email" class="form__feedback form__feedback--error">
+					Please enter a valid email.
+				</div>
+			</div>
+		</div>
+		<div class="form__group" [ngClass]="{ 'form__group--error': hasError('role') }">
+			<label class="form__label">Role:</label>
+			<ng-select
+				id="user-form-roles"
+				[items]="allRoles$ | async"
+				bindLabel="prettyName"
+				[multiple]="false"
+				labelForId="id"
+				placeholder="Role"
+				formControlName="role"
+			>
+			</ng-select>
+			<div *ngIf="hasError('role')" class="form__validation">
+				<div *ngIf="role.errors.required" class="form__feedback form__feedback--error">
+					One role must be set.
+				</div>
+			</div>
+		</div>
+		<div class="form__group" [ngClass]="{ 'form__group--error': hasError('organisation') }">
+			<label class="form__label">Organisation:</label>
+			<ng-select
+				id="user-form-organisation"
+				[items]="allOrgs$ | async"
+				bindLabel="name"
+				[searchable]="true"
+				[selectOnTab]="true"
+				[hideSelected]="true"
+				labelForId="id"
+				placeholder="Organisation"
+				formControlName="organisation"
+			>
+			</ng-select>
+		</div>
+		<div *ngIf="showRestrictions" class="form__group">
+			<label class="form__label">Operator restrictions:</label>
+			<ng-select
+				id="user-form-operators"
+				[items]="allOperators$ | async"
+				bindLabel="name"
+				[multiple]="true"
+				[searchable]="true"
+				[hideSelected]="true"
+				labelForId="entityId"
+				placeholder="Operators"
+				formControlName="restrictedOperators"
+			>
+			</ng-select>
+		</div>
+		<div *ngIf="showRestrictions" class="form__group">
+			<label class="form__label">Line restrictions:</label>
+			<ng-select
+				id="user-form-lines"
+				[items]="allLines$ | async"
+				bindLabel="featureName"
+				[multiple]="true"
+				[searchable]="true"
+				[hideSelected]="true"
+				labelForId="entityId"
+				placeholder="Lines"
+				formControlName="restrictedLines"
+			>
+			</ng-select>
+		</div>
+	</form>
+	<dm-spinner name='edit-user' [show]="usersService.loading$ | async"></dm-spinner>
+	<dm-banner *ngIf="usersService.errors$ | async as errors; else success" appearance="error">{{ errors }}</dm-banner>
+
+	<ng-template #success>
+		<dm-banner *ngIf="usersService.serverResponse$ | async" appearance="success">
+			<span *ngIf="user">User has been updated.</span>
+			<span *ngIf="user === null">User has been invited.</span>
+		</dm-banner>
+	</ng-template>
+	<div class="form__actions">
+		<dm-button-group justify="right">
+			<dm-button btnId="edit-user-modal-cancel" (onClick)="userForm.reset(); usersService.modalClose()"
+				>Close</dm-button
+			>
+			<dm-button appearance="primary" id="edit-user-modal-submit" (onClick)="onSubmit()">Submit</dm-button>
+		</dm-button-group>
+	</div>
+</div>

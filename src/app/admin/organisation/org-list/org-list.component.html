@@ -1,0 +1,8 @@
+<dm-table
+	resource="organisation"
+	[rowData]="organisations$ | async"
+	[loading]="orgService.loading$ | async"
+	[columnDefs]="columnDefs"
+	(edit)="onEdit($event)"
+	(delete)="onDelete($event)">
+</dm-table>

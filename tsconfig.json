@@ -1,0 +1,35 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "module": "es2015",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es5",
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "dom",
+      "esnext.asynciterable"
+    ]
+  },
+  "files": [
+    "node_modules/kdbush/src/index.js",
+    "node_modules/supercluster/index.js",
+    "node_modules/bad-words/lib/badwords.js",
+  ],
+  "include": [
+  	"src/**/*",
+  	"node_modules/@mapbox/mapbox-gl-draw/src/**/*",
+  	"node_modules/geodesy/*"
+  ]
+}

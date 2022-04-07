@@ -1,0 +1,147 @@
+<div *ngIf="disruptionSet()" class="preview">
+	<ngx-spinner
+		id="disruption-loading-spinner"
+		bdColor="rgba(222,225,234,0.6)"
+		size="medium"
+		color="#00bbb0"
+		[fullScreen]="false"
+	>
+	</ngx-spinner>
+	<header class="preview__header">
+		<dm-icon-button
+			(onClick)="closeSummary()"
+			accessibilityLabel="Close disruption preview"
+			appearance="minimal"
+			class="preview__close"
+			icon="close"
+			size="lg"
+		></dm-icon-button>
+		<h2 class="preview__title">{{ disruption.title }}</h2>
+		<div class="preview__status">
+			<span class="preview__status-badge">Status</span>
+			<span>{{ disruption.status }}</span>
+			<dm-live-indicator *ngIf="disruption.isLive"></dm-live-indicator>
+		</div>
+	</header>
+	<ul class="tabs tabs--light">
+		<li class="tabs__item" [ngClass]="{ 'tabs__item--active': activeTab === 'Overview' }">
+			<button class="tabs__button" type="button" (click)="setActive('Overview')">
+				Overview
+			</button>
+		</li>
+		<li class="tabs__item" [ngClass]="{ 'tabs__item--active': activeTab === 'History' }">
+			<button class="tabs__button" type="button" (click)="setActive('History')">
+				History
+			</button>
+		</li>
+	</ul>
+	<div class="preview__content">
+		<div *ngIf="activeTab === 'Overview'" class="overview">
+			<h4 class="preview__section-title">Description</h4>
+			<p class="preview__section-description">{{ disruption.description }}</p>
+			<h4 class="preview__section-title">Operators</h4>
+			<p>{{ disruption.networkWide && !disruption.operators ? 'All operators' : disruption.operators }}</p>
+			<h4 class="preview__section-title">Services affected</h4>
+			<p *ngIf="disruption.servicesAffected">{{ disruption.servicesAffected }}</p>
+			<p *ngIf="disruption.stopsSummary">Stops: {{ disruption.stopsSummary }}</p>
+			<p *ngIf="!(disruption.stopsSummary || disruption.servicesAffected)">None</p>
+			<h4 class="preview__section-title">Reason</h4>
+			<p>{{ disruption.reason }}</p>
+			<h4 class="preview__section-title">Expected delay</h4>
+			<p>{{ disruption.delay }} minutes</p>
+			<h4 class="preview__section-title">Severity</h4>
+			<p>{{ disruption.severity }}</p>
+			<h4 class="preview__section-title">Duration</h4>
+			<p>{{ disruption.duration }}</p>
+			<h4 class="preview__section-title">
+				Validity period{{ disruption.validityPeriods.length > 1 ? 's' : '' }}
+			</h4>
+			<dm-validity-period [periods]="disruption.validityPeriods"
+								dividers="true"></dm-validity-period>
+			<h4 class="preview__section-title">Created by</h4>
+			<p>{{ disruption.createdBy }}</p>
+		</div>
+		<div *ngIf="activeTab === 'History'" class="history">
+			<div class="history">
+				<ng-container *ngIf="history; else loading">
+					<ng-container *ngIf="history.length; else noItems">
+						<ul class="history__list">
+							<li *ngFor="let record of history; let i = index"
+								class="history__item">
+								<div class="history__title">
+									<svg-icon src="assets/icons/user.svg"
+											  class="history__icon"></svg-icon>
+									<div class="history__username">
+										<h4>
+											{{ formatUsername(record.username) }}
+											<span>{{ record.timestampFromNow }}</span>
+										</h4>
+									</div>
+									<div class="history__time">{{ record.timestamp }}</div>
+								</div>
+								<div class="history__message">
+									<div>
+										<strong>{{ record.action }}: </strong>
+										<a *ngIf="record.link"
+										   [routerLink]="[record.link]">{{ record.contentType }}</a>
+										<span
+											*ngIf="!record.link">{{ record.contentType }}</span>
+									</div>
+									<ul>
+										<li class="history__field"
+											*ngFor="let change of record.fieldChanges; let i = index">
+											<span
+												*ngIf="change.action === 'Changed' else added_or_deleted">
+												{{ change.action }} {{ change.field }}:
+												<span
+													class="history__field_value">{{ change.oldValue }}</span> to
+												<span
+													class="history__field_value">{{ change.newValue }}</span>
+											</span>
+											<ng-template #added_or_deleted>
+												{{ change.action }} {{ change.field }}:
+												<span
+													class="history__field_value">{{ change.newValue }}</span>
+											</ng-template>
+										</li>
+									</ul>
+								</div>
+							</li>
+						</ul>
+					</ng-container>
+					<ng-template #noItems>
+						No history available
+					</ng-template>
+				</ng-container>
+				<ng-template #loading>
+					<h3>Loading...</h3>
+				</ng-template>
+			</div>
+		</div>
+	</div>
+	<div class="preview__footer">
+		<dm-button-group>
+			<dm-button
+				[route]="['/disruption/', disruption.id]"
+				accessibilityLabel="View details for disruption id {{ disruption.id }}"
+				btnId="view-disruption-{{ disruption.id }}"
+			>View
+			</dm-button
+			>
+			<dm-button
+				[route]="['/disruption/edit', disruption.id]"
+				accessibilityLabel="Edit disruption id {{ disruption.id }}"
+				btnId="edit-disruption-{{ disruption.id }}"
+			>Edit
+			</dm-button
+			>
+			<dm-delete-disruption
+				(onCompletion)="closeSummary()"
+				[id]="disruption.id"
+				[title]="disruption.title"
+				[redirectUrl]="deleteRedirectUrl"
+			></dm-delete-disruption>
+		</dm-button-group>
+	</div>
+</div>
+

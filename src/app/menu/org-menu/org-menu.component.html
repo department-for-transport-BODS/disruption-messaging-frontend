@@ -1,0 +1,16 @@
+<nav class="org-menu" role="navigation">
+	<ul class="org-menu__list">
+		<li class="org-menu__item" routerLinkActive="org-menu__item--expanded">
+			<a class="org-menu__link" routerLinkActive="org-menu__link--current" [routerLink]="['/admin']">
+				<svg-icon [applyCss]="true" class="org-menu__icon" src="assets/icons/setting.svg"></svg-icon>
+				<span class="org-menu__label">Admin</span>
+			</a>
+		</li>
+		<li class="org-menu__item">
+			<a class="org-menu__link" href="#" [routerLink]="['/support']">
+				<svg-icon class="org-menu__icon" src="assets/icons/support.svg"></svg-icon>
+				<span class="org-menu__label">Support</span>
+			</a>
+		</li>
+	</ul>
+</nav>

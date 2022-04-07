@@ -1,0 +1,44 @@
+// Neutrals
+
+$shade: #5a6176;
+
+$shade-darker: #2e3343;
+$shade-dark: #40475d;
+$shade-light: #9098b0;
+
+$mist: #dee1ea;
+
+$mist-darker: darken($mist, 10);
+$mist-dark: #c9cdda;
+$mist-light: #eff1f7;
+$mist-lighter: #f9fafc;
+
+// Grays
+
+$gray-30: #343434;
+
+// Brand
+
+$mint-dark: #1a8389;
+$mint: #00bbb0;
+$mint-light: #a2e7e3;
+
+// Validation
+
+$error-dark: #bf260b;
+$error: #ed2118;
+$error-light: #fbd3d1;
+$error-lighter: #faebe6;
+$error-text: #752f2c;
+
+$success-dark: #07943b;
+$success: #0ac74f;
+$success-light: #cbe6d5;
+$success-lighter: #ebf9f0;
+$success-text: #19272a;
+
+$warning-dark: #ff9f00;
+$warning: #ffba4a;
+$warning-light: #ffce7d;
+$warning-text: white;
+

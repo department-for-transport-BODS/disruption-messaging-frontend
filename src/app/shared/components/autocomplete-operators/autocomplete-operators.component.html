@@ -1,0 +1,11 @@
+<ng-select
+	[items]="allOperators$ | async"
+	bindLabel="name"
+	bindValue="name"
+	placeholder="Operator"
+	multiple="true"
+	[loading]="loading"
+	(change)="onValueChange($event)"
+	[(ngModel)]="selectedItems"
+>
+</ng-select>

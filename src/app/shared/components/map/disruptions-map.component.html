@@ -1,0 +1,127 @@
+<div id="disruption-map-container"
+	 class="map-container"
+	 style="height: inherit; width: inherit;"
+>
+	<ngx-spinner
+		id="disruption-loading-spinner"
+		bdColor="transparent"
+		size="medium"
+		color="#00bbb0"
+		[fullScreen]="false"
+		>
+	</ngx-spinner>
+	<mgl-map
+		[style]="'mapbox://styles/ito-mapbox/cjxpzx0vh02vk1clb89qxbw3n'"
+		[zoom]=[9]
+		[maxZoom]=18
+		[center]="centre"
+		interactive=true
+		class="mgl-map"
+		id="disruptions-map"
+		[preserveDrawingBuffer]=true
+		(load)="onLoad($event);"
+	>
+		<ng-container *ngIf="data">
+			<mgl-popup
+				*ngIf="hoveredIconData"
+				[lngLat]="hoveredIconData.geometry.coordinates.slice()"
+				[closeOnClick]="false"
+				[closeButton]="false"
+				id="map-popup"
+				class="map-popup"
+			>
+				<map-popup
+					[title]="hoveredIconData.properties.title"
+					[severity]="hoveredIconData.properties.severity"
+					[impact]="hoveredIconData.properties.impact"
+					[stop]="hoveredIconData.properties.stop"
+				></map-popup>
+			</mgl-popup>
+			<mgl-geojson-source
+				id="disruptions"
+				[data]="data"
+				[cluster]="true"
+				[clusterMaxZoom]="12"
+				[clusterRadius]="50"
+			></mgl-geojson-source>
+			<mgl-layer
+				id="clusters"
+				type="circle"
+				source="disruptions"
+				[filter]="['has', 'point_count']"
+				(click)="onClusterClick($event)"
+				(mouseEnter)="map.getCanvas().style.cursor = 'pointer';"
+				(mouseLeave)="map.getCanvas().style.cursor = '';"
+				[paint]="{
+					'circle-color': '#c9cdda',
+					'circle-radius': {
+						property: 'point_count',
+						type: 'interval',
+						stops: [
+							[0, 20],
+							[5, 30],
+							[10, 40],
+							[20, 60],
+							[30, 80]
+						]
+					}
+				}"
+			></mgl-layer>
+			<mgl-layer
+				id="cluster-count"
+				type="symbol"
+				source="disruptions"
+				[filter]="['has', 'point_count']"
+				[layout]="{
+					'text-field': '{point_count_abbreviated}',
+					'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+					'text-size': 12
+				}"
+			>
+			</mgl-layer>
+			<mgl-layer
+				id="colour-disruptions"
+				type="circle"
+				source="disruptions"
+				[filter]="['!', ['has', 'point_count']]"
+				[paint]="{
+            		'circle-stroke-width': 1,
+            		'circle-stroke-color': ['get', 'iconColour'],
+            		'circle-stroke-opacity': 1,
+            		'circle-color': ['get', 'iconColour'],
+            		'circle-radius': 20
+				}"
+			></mgl-layer>
+			<mgl-layer
+				id="colour-disruptions-live"
+				type="circle"
+				source="disruptions"
+				[filter]="[ 'all', ['!', ['has', 'point_count']], ['get', 'isLive'] ]"
+				[paint]="{
+            		'circle-stroke-width': 2,
+            		'circle-stroke-color': ['get', 'iconColour'],
+            		'circle-stroke-opacity': 1,
+            		'circle-radius': 23,
+            		'circle-color': ['get', 'iconColour'],
+            		'circle-opacity': 0
+				}"
+			></mgl-layer>
+			<mgl-layer
+				id="layer-disruptions"
+				type="symbol"
+				source="disruptions"
+				[layout]="{
+					'icon-image': ['get', 'icon'],
+					'icon-size': 0.4,
+					'icon-allow-overlap': false
+				}"
+				(mouseEnter)="onMouseEnter($event)"
+				(mouseLeave)="onMouseLeave()"
+				(click)="onClick($event)"
+			></mgl-layer>
+			<mgl-control
+				mglNavigation
+			></mgl-control>
+		</ng-container>
+	</mgl-map>
+</div>

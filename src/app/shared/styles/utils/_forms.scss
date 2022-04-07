@@ -1,0 +1,291 @@
+//
+// __FORMS.scss
+//
+// Shared form layout styling. Used in conjunction with base/_forms
+// which control the styling of <input> <label> etc.
+
+@import '../variables/variables';
+@import '../functions/functions';
+
+.form__group {
+	padding: 0;
+	margin-bottom: $spacing-md;
+	border: 0 none;
+	margin-inline-end: 0;
+	margin-inline-start: 0;
+	&--with-counter {
+		margin-bottom: $spacing-xs;
+		.form--relaxed &.form__group {
+			margin-bottom: $spacing-xs;
+		}
+	}
+	.form--relaxed & {
+		margin-bottom: $spacing-lg;
+	}
+}
+// differs from control group in that this is used when there's a series of whole form_groups in a grid-layout
+// in this case the validators usually have to live outside the groups themselves - so the validation is sucked up
+.form__group-set {
+	margin-bottom: $spacing-sm;
+	.form__label {
+		font-weight: $font-weight-default;
+		font-size: rem(14);
+		line-height: $line-height-14;
+		color: $shade;
+		margin-top: 0;
+	}
+	.form__group {
+		margin-bottom: $spacing-sm;
+	}
+	& + .form__validation {
+		margin-top: -$spacing-md;
+		margin-bottom: $spacing-md;
+	}
+}
+
+.form__label {
+	font-weight: $font-weight-semibold;
+	margin: $spacing-xs 0;
+	color: $gray-30;
+	white-space: nowrap;
+	&[required]:after {
+		content: '*';
+	}
+	.form__group--error & {
+		color: $error;
+	}
+}
+
+.form__control {
+	&--lg {
+		height: rem(48);
+		font-size: rem(18);
+		line-height: $line-height-18;
+		padding: rem(11) rem(12);
+	}
+	.form__group--error & {
+		border-color: $error;
+		box-shadow: 0 0 0 3px $error-light;
+	}
+}
+
+// Read only version of the form input
+.form__value {
+	box-sizing: border-box;
+	margin-bottom: 0;
+}
+
+// similar to form__field-group value-groups let you put together several fields into a single line
+.form__value-group {
+	display: flex;
+	align-items: center;
+}
+.form__value-append {
+	margin-left: $spacing-sm;
+}
+.form__value-prepend {
+	margin-right: $spacing-sm;
+}
+
+// some complex inputs (such as date range picker) require a position relative on the container
+.form__control-wrapper {
+	position: relative;
+}
+
+// for form groups where you can add multiple rows
+.form__repeater {
+	& + & {
+		margin-top: $spacing-sm;
+	}
+}
+
+// used to put collections of form__controls in a row (e.g. radio and checkboxes)
+.form__control-group {
+	display: flex;
+	margin-left: -$spacing-md;
+	margin-top: -$spacing-md;
+	flex-wrap: wrap;
+	align-items: center;
+	.form__radio,
+	.form__checkbox {
+		margin-left: $spacing-md;
+		margin-top: $spacing-md;
+		margin-bottom: 0;
+		flex: 0 1 rem(200);
+		max-width: calc(100% - #{$spacing-md});
+	}
+	.form__label + & {
+		margin-top: -$spacing-sm;
+	}
+}
+
+// Checkboxes and radio buttons use pseudo-elements on the <label> tag to give better
+// control of the presentation. This relies on correct classes being applied to both
+// label and input and that the "for" attribute has been correctly set for the label
+
+.form__radio,
+.form__checkbox {
+	position: relative;
+	display: block;
+	padding-left: $spacing-xl;
+	position: relative;
+	.form__label {
+		margin-top: 0;
+		margin-bottom: 0;
+		font-weight: $font-weight-default;
+		&:before,
+		&:after {
+			content: '';
+			display: block;
+			position: absolute;
+			top: rem(2);
+			left: 0;
+			box-sizing: border-box;
+		}
+
+		.form__group--error &:before {
+			border-color: $error;
+			box-shadow: 0 0 0 3px $error-light;
+		}
+	}
+}
+.form__radio {
+	.form__label {
+		&:before {
+			width: rem(20);
+			height: rem(20);
+			border: 2px solid $shade-light;
+			border-radius: 50%;
+		}
+		&:after {
+			width: rem(12);
+			height: rem(12);
+			background: $mint;
+			border-radius: 50%;
+			margin: rem(4);
+			transform: scale(0);
+			transition-property: transform;
+			transition-duration: 0.15s;
+			transition-timing-function: $transition-easing;
+		}
+	}
+	.form__radio-input:checked {
+		& + .form__label:after {
+			transform: scale(1);
+		}
+		& + .form__label:before {
+			border-color: $mint-dark;
+		}
+	}
+	.form__radio-input:focus + .form__label:before {
+		box-shadow: $accessibility-box-shadow;
+		outline: 0;
+		border-color: $mint;
+	}
+}
+
+.form__checkbox {
+	.form__label {
+		&:before {
+			width: rem(20);
+			height: rem(20);
+			border: 2px solid $shade-light;
+			border-radius: rem(4);
+			z-index: $z-content;
+		}
+		&:after {
+			background-color: $mint;
+			background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2210%22%20height%3D%228%22%20viewBox%3D%220%200%2010%208%22%3E%0A%20%20%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M9.0550002%2C12.1679497%20C8.59547151%2C11.8615972%207.97460216%2C11.9857711%207.66824971%2C12.4452998%20C7.36189725%2C12.9048285%207.48607112%2C13.5256978%207.9455998%2C13.8320503%20L10.9455998%2C15.8320503%20C11.4051285%2C16.1384028%2012.0259978%2C16.0142289%2012.3323503%2C15.5547002%20L16.3323503%2C9.5547002%20C16.6387028%2C9.09517151%2016.5145289%2C8.47430216%2016.0550002%2C8.16794971%20C15.5954715%2C7.86159725%2014.9746022%2C7.98577112%2014.6682497%2C8.4452998%20L11.2229499%2C13.6132495%20L9.0550002%2C12.1679497%20Z%22%20transform%3D%22translate%28-7%20-8%29%22/%3E%0A%3C/svg%3E%0A');
+			background-position: 50% 50%;
+			background-repeat: no-repeat;
+			width: rem(16);
+			height: rem(16);
+			margin: rem(2);
+			opacity: 0;
+			transform: scale(0.8);
+			transition-property: transform;
+			transition-duration: 0.05s;
+			transition-timing-function: $transition-easing;
+			z-index: $z-content - 1;
+		}
+	}
+	.form__checkbox-input:checked {
+		& + .form__label:after {
+			transform: scale(1);
+			opacity: 1;
+		}
+		& + .form__label:before {
+			border-color: $mint-dark;
+		}
+	}
+	.form__checkbox-input:focus + .form__label:before {
+		box-shadow: $accessibility-box-shadow;
+		outline: 0;
+		border-color: $mint;
+	}
+}
+
+.form__radio-input,
+.form__checkbox-input {
+	position: absolute;
+	top: rem(2);
+	left: 0;
+	opacity: 0;
+}
+.form__radio-label {
+	display: block;
+}
+
+// Validaton and counters
+.form__validation {
+	display: flex;
+	flex-direction: column;
+	&:empty {
+		display: none;
+	}
+	.form__group--with-counter {
+		flex-direction: row;
+	}
+}
+
+.form__feedback {
+	font-size: rem(14);
+	line-height: $line-height-14;
+	margin-top: $spacing-xs;
+	&--error {
+		color: $error;
+	}
+	& + & {
+		margin-top: 0;
+	}
+}
+
+// show the character count for a form control
+.form__counter {
+	color: $shade;
+	flex-grow: 1;
+	text-align: right;
+	font-size: rem(14);
+	line-height: $line-height-14;
+	margin-top: $spacing-xs;
+	margin-bottom: $spacing-xs;
+
+	&--error {
+		color: $error;
+	}
+}
+
+// Help text and optional indicators
+// We're using "optional" rather than required since most fields in a disruption
+// are required
+.form__optional,
+.form__hint {
+	font-size: rem(15);
+	color: $shade;
+	line-height: $line-height-15;
+}
+
+// Buttons at the bottom of the form
+.form__actions {
+	margin-top: $spacing-lg;
+}

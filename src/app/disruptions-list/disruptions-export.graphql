@@ -1,0 +1,169 @@
+query exportDisruptionsList(
+	$status: DisruptionStatusInput
+	$severity: SeverityInput
+	$mode: ModeInput
+	$operators: [String],
+	$lines: [String],
+	$startDate: Date
+	$endDate: Date
+	$isTemplate: Boolean
+	$after: String
+	$titleFilter: String
+	$sortBy: [DisruptionSortableFields]
+) {
+	allDisruptions(
+		status: $status
+		severity: $severity
+		mode: $mode
+		operators: $operators
+		lines: $lines
+		validityStart: $startDate
+		validityEnd: $endDate
+		isTemplate: $isTemplate
+		after: $after
+		title_Icontains: $titleFilter
+		sortBy: $sortBy
+	) {
+		totalCount
+		pageInfo {
+			hasNextPage
+			endCursor
+		}
+		edges {
+			node {
+				id
+				title
+				description
+				version
+				link
+				status
+				severity
+				isLive
+				createdBy {
+					id
+          			username
+        		}
+				type
+				isTemplate
+				relatedDisruption {
+          			edges {
+            			node {
+              				id
+            			}
+          			}
+        		}
+				organisation {
+          			id
+					name
+        		}
+				isOpenEnded
+				openSince
+				deleted
+				reason
+				approvedBy {
+					id
+          			username
+        		}
+				relatedTo {
+          			edges {
+            			node {
+              				id
+            			}
+          			}
+        		}
+				publishingStart
+				publishingEnd
+				impact {
+					edges {
+						node {
+							id
+							name
+							advice
+							severity
+							delay
+							journeyPlanner
+							direction
+							allOperators
+							mode
+							lines {
+								edges {
+									node {
+										id
+										name
+									}
+								}
+							}
+							stops {
+								edges {
+									node {
+										id
+										commonName
+										naptanCode
+										atcoCode
+									}
+								}
+							}
+							operators {
+								edges {
+									node {
+										id
+										name
+									}
+								}
+							}
+						}
+					}
+				}
+				validityPeriod {
+					startDate
+					endDate
+					startTime
+					endTime
+					finalDate
+					repetition
+				}
+				socialMessages {
+          			id
+          			message
+					image {
+						name
+						url
+					}
+          			socialAccount {
+            			id
+            			username
+            			accountType
+            			prettyName
+            			facebookPages {
+							id
+							name
+						}
+            			email
+            			createdBy {
+            				id
+              				username
+            			}
+            			hootsuiteProfiles {
+              				id
+              				account {
+                				username
+              				}
+              				profileType
+              				profileId
+              				socialId
+              				socialUsername
+
+            			}
+          			}
+          			publishOn
+          			published
+          			publishedOn
+          			lastPublishError
+
+        		}
+
+
+			}
+		}
+	}
+}

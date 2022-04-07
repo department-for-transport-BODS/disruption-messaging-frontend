@@ -1,0 +1,16 @@
+<div class="grid">
+	<div *ngFor="let impact of disruption.impacts; let i = index">
+		<div class="grid__row">
+			<div class="grid__col--xs-12">
+				<dm-impact-list-item [editable]="false" [impact]="impact" [index]="i"></dm-impact-list-item>
+			</div>
+		</div>
+	</div>
+	<div *ngIf="disruption.impacts.length">
+		<span>{{ disruption.impacts.length }} </span>
+		impacted service{{ disruption.impacts.length == 1 ? '' : 's' }}
+	</div>
+	<div *ngIf="disruption.impacts.length == 0">
+		There are no impacts added for this disruption
+	</div>
+</div>

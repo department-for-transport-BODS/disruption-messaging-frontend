@@ -1,0 +1,16 @@
+<div *ngFor="let period of periods" class="{{ validityPeriodClasses }}">
+	<div class="validity-period__date">
+		<svg-icon class="validity-period__icon" src="assets/icons/date.svg"></svg-icon>
+		<span>{{ period.startDate }}</span
+		><span *ngIf="period.startDate != period.endDate"> - {{ period.endDate }}</span>
+	</div>
+	<div class="validity-period__time">
+		<svg-icon class="validity-period__icon" src="assets/icons/time.svg"></svg-icon>
+		<span>{{ period.startTime }}</span>
+		<span> - {{ period.endTime }}</span>
+	</div>
+	<div *ngIf="period.repetition">
+		<svg-icon class="validity-period__icon" src="assets/icons/repeat.svg"></svg-icon>
+		Repeating <b>{{ period.repetition | lowercase }}</b> until {{ period.repetitionEnd }}
+	</div>
+</div>

@@ -1,0 +1,7 @@
+mutation logout {
+    logout 
+    {
+        success,
+        errors
+    }
+}

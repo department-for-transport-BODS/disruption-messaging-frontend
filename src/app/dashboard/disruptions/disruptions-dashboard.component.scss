@@ -1,0 +1,93 @@
+@import 'src/app/shared/styles/variables/variables';
+@import 'src/app/shared/styles/functions/functions';
+
+.dashboard-disruptions {
+	&__inner {
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: stretch;
+		flex-direction: column-reverse;
+	}
+	&__details,
+	&__map {
+		flex-basis: 50%;
+	}
+	&__map {
+		height: rem(300);
+	}
+	&__list {
+		padding: $spacing-sm $spacing-md 0 $spacing-md;
+		height: rem(340);
+		overflow: hidden;
+		overflow-y: auto;
+		&::-webkit-scrollbar {
+			width: rem(8);
+			padding: 2px;
+		}
+		&::-webkit-scrollbar-track {
+			background: white;
+			box-shadow: inset 1px 0 8px rgba(0, 0, 0, 0.03);
+		}
+		&::-webkit-scrollbar-thumb {
+			background: $mist-dark;
+			border-radius: rem(6);
+			margin: 0 4px;
+		}
+	}
+	&__tabs {
+		margin: 0 $spacing-md;
+		border-bottom: 2px solid $mist;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+	}
+	&__tab {
+		flex-basis: 50%;
+		text-align: center;
+		justify-content: center;
+		padding: $spacing-md $spacing-sm rem(10);
+		position: relative;
+		z-index: $z-content;
+		&--active {
+			font-weight: $font-weight-bold;
+			&::after {
+				display: block;
+				content: '';
+				position: absolute;
+				top: 100%;
+				left: 0;
+				right: 0;
+				height: 2px;
+				background: $mint;
+			}
+			&:focus {
+				outline: none;
+			}
+		}
+		&:focus {
+			outline: $accessibility-outline;
+		}
+	}
+	&__skeleton {
+		display: flex;
+		margin-bottom: $spacing-md * 2;
+		padding-bottom: rem(2);
+	}
+	&__skeleton-left {
+		@include skeleton(1, 14px, 10px, lighten($mist, 4), rgba(255, 255, 255, 0.6), 3s, rem(30));
+		margin-right: $spacing-md;
+	}
+	&__skeleton-right {
+		@include skeleton(3, 14px, 12px, lighten($mist, 4), rgba(255, 255, 255, 0.6), 3s, 60%);
+	}
+}
+@include bp($tablet) {
+	.dashboard-disruptions {
+		&__inner {
+			flex-direction: row;
+		}
+		&__map {
+			height: auto;
+		}
+	}
+}

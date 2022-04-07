@@ -1,0 +1,37 @@
+<dm-card id="dashboard-social-feed">
+	<dm-card-header>Social</dm-card-header>
+	<ng-container id="social-feed-list" *ngIf="posts$ | async as data; else loading">
+		<ng-container *ngIf="data.length; else noItems">
+			<ul class="social-feed-dashboard__list">
+				<li *ngFor="let post of data; let i = index">
+					<div class="social-feed-dashboard__item">
+						<div class="social-feed-dashboard__account">
+							<div class="social-feed-dashboard__title">
+								<div class="social-feed-dashboard__username">
+									<svg-icon src="assets/icons/user.svg" class="social-feed-dashboard__icon"></svg-icon>
+									<div [innerHTML]="post.socialAccount"></div>
+								</div>
+								<div class="social-feed-dashboard__profile" *ngIf=post.hootSuiteProfile [innerHTML]="post.hootSuiteProfile"></div>
+							</div>
+							<div class="social-feed-dashboard__time">
+								{{ post.publishedOn }}
+							</div>
+						</div>
+						<div class="social-feed-dashboard__message">{{ post.message }}</div>
+					</div>
+				</li>
+			</ul>
+		</ng-container>
+		<ng-template #noItems>
+			<div class="social-feed-dashboard__item-none">
+				<i>No posts to social media in the last 24 hours.</i>
+			</div>
+		</ng-template>
+	</ng-container>
+	<ng-template #loading>
+		<div class="social-feed-dashboard__skeleton">
+			<div class="social-feed-dashboard__skeleton-left"></div>
+			<div class="social-feed-dashboard__skeleton-right"></div>
+		</div>
+	</ng-template>
+</dm-card>

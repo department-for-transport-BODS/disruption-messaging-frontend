@@ -1,0 +1,8 @@
+<div class="card-header">
+	<h3 class="card-header__title"><ng-content></ng-content></h3>
+	<div class="card-header__actions" *ngIf="actionBtnRoute">
+		<dm-button [route]="actionBtnRoute" size="xs" [btnId]="actionBtnId" appearance="primary">{{
+			actionBtnLabel ? actionBtnLabel : 'View All'
+		}}</dm-button>
+	</div>
+</div>

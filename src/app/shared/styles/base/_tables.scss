@@ -1,0 +1,40 @@
+//
+// _TABLES.scss
+//
+// Base styling for <table> <thead> <tr> <th> <td>
+// Note that some plugins (e.g. mdr-datepicker and mapbox-gl) make use of table elements
+// The style for those plugins overrides this styling.
+
+@import '../variables/variables';
+@import '../functions/functions';
+
+table {
+	border-collapse: collapse;
+	border-style: hidden;
+	border-radius: 0.25rem;
+	width: 100%;
+	flex-grow: 1;
+	border-radius: rem(4);
+	overflow: hidden;
+}
+thead tr {
+	background-color: $shade;
+	border-radius: rem(4) rem(4) 0 0;
+}
+
+tbody tr {
+	background: white;
+	border-bottom: 1px solid $mist;
+}
+th {
+	color: white;
+	font-weight: $font-weight-semibold;
+	font-size: rem(14);
+	line-height: $line-height-14;
+}
+th,
+td {
+	text-align: left;
+	padding: $spacing-sm $spacing-md;
+	height: rem(32);
+}

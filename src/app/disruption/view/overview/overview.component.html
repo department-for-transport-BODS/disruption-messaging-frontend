@@ -1,0 +1,66 @@
+<div class="form">
+	<div class="grid">
+		<div class="grid__row">
+			<div class="grid__col--xs-12 grid__col--lg-10 grid__col--xl-8">
+				<h2 class="view-overview__title">{{ disruption.title }}</h2>
+				<!-- <h4>{{ disruption.status }}</h4> -->
+
+				<div *ngIf="disruption.description" class="form__group">
+					<div class="form__label">Description</div>
+					<div class="view-overview__description form__value form__value--textarea">{{ disruption.description }}</div>
+				</div>
+
+				<div *ngIf="disruption.link" class="form__group">
+					<div class="form__label">Link</div>
+					<div class="form__value-group">
+						<div class="form__value">{{ disruption.link }}</div>
+						<div class="form__value-append">
+							<dm-button size="xs" [url]="disruption.link">Test</dm-button>
+						</div>
+					</div>
+				</div>
+
+				<div class="form__group">
+					<div class="form__label">Type</div>
+					<div class="form__value">{{ disruption.type }}</div>
+				</div>
+				<div class="form__group">
+					<div class="form__label">Reason</div>
+					<div class="form__value">{{ disruption.reason }}</div>
+				</div>
+				<div class="form__group">
+					<div class="form__label">Status</div>
+					<div class="form__value">{{ disruption.status }}</div>
+				</div>
+				<div class="form__group">
+					<div class="form__label">Expected delay</div>
+					<div class="form__value">{{ disruption.delay }} minutes</div>
+				</div>
+
+				<div *ngIf="disruption.relatedDisruptions.length > 0" class="form__group">
+					<div class="form__label">Related disruptions</div>
+					<div *ngFor="let related of disruption.relatedDisruptions">
+						<dm-badge
+							[route]="['/disruption/', related.id]"
+							[title]="related.status"
+							id="related-{{ related.id }}"
+							>{{ related.title }} ({{ related.id }})</dm-badge
+						>
+					</div>
+				</div>
+				<div class="form__group">
+					<div class="form__label">Duration</div>
+					<div class="form__value">{{ disruption.duration }}</div>
+				</div>
+				<div *ngIf="disruption.validityPeriods.length > 0" class="form__group">
+					<div class="form__label">Validity period{{ disruption.validityPeriods.length > 1 ? 's' : '' }}</div>
+					<dm-validity-period [periods]="disruption.validityPeriods"></dm-validity-period>
+				</div>
+				<div class="form__group">
+					<div class="form__label">Publishing</div>
+					<div class="form__value">{{ disruption.publishingStart }} to {{ disruption.publishingEnd }}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

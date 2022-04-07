@@ -1,0 +1,40 @@
+<div class="view-messaging">
+	<div class="grid">
+		<div *ngIf="disruption && disruption.socialMessages.length; else noMessages">
+			<div *ngFor="let message of disruption.socialMessages" class="view-messaging__item">
+				<div class="grid__row">
+					<div class="grid__col--xs-12 grid__col--lg-4 grid__col--xl-4 view-messaging__meta">
+						<div class="view-messaging__platform" [innerHTML]="message.socialAccount"></div>
+						<div *ngIf="message.hootSuiteProfile" class="view-messaging__hootsuite" [innerHTML]="message.hootSuiteProfile"></div>
+						<div class="view-messaging__date">{{ message.publishDateTime }}</div>
+						<div class="view-messaging__message">{{ publishStatusMessage(message) }}</div>
+								</div>
+					<div class="grid__col--xs-12 grid__col--lg-8 grid__col--xl-8 view-messaging__message">
+						{{ message.message }}
+							<!--  DM-1259: Revert Image Download -->
+						<!-- </div>
+						<div class="view-messaging__image">
+								<a *ngIf="message.image.url; else fileNoDownload" href="{{message.image.url}}" target="_blank" download>
+										{{message.image.name}} 
+									  </a>
+									  <ng-template #fileNoDownload>
+								<h4 *ngIf="image(i).value.name; else fileNameString">
+									{{message.image.name}}
+								</h4>
+								<ng-template #fileNameString>
+									{{message.image.value}}
+								</ng-template></ng-template></div>
+					</div> -->
+				</div>
+				</div>
+			</div>
+		</div>
+		<ng-template #noMessages>
+			<div class="grid__row">
+				<div class="grid__col--xs-12 grid__col--lg-10 grid__col--xl-8">
+					There are no social messages for this disruption
+				</div>
+			</div>
+		</ng-template>
+	</div>
+</div>

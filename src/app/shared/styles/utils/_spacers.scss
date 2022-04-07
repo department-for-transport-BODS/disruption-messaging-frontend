@@ -1,0 +1,32 @@
+//
+// __SPACERS.scss
+//
+// Helper classes to add margin/padding in vertical rhythm multiples.
+//
+// usage:
+// .pb-xs : padding-bottom : 4px
+// .ml-md : margin-left: 16px
+
+$directions: (
+	left: l,
+	right: r,
+	top: t,
+	bottom: b
+);
+
+@each $direction, $suffix in $directions {
+	.m#{$suffix} {
+		@each $spacing, $size in $spacing-sizes {
+			&-#{$spacing} {
+				margin-#{$direction}: rem($size);
+			}
+		}
+	}
+	.p#{$suffix} {
+		@each $spacing, $size in $spacing-sizes {
+			&-#{$spacing} {
+				padding-#{$direction}: rem($size);
+			}
+		}
+	}
+}

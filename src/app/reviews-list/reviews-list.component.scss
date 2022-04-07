@@ -1,0 +1,148 @@
+@import 'src/app/shared/styles/variables/variables';
+@import 'src/app/shared/styles/functions/functions';
+
+.reviews-list {
+	&__totals {
+		color: $shade-dark;
+		margin-bottom: $spacing-md;
+		@include skeleton(1, 14px, 10px, lighten($mist, 4), rgba(255, 255, 255, 0.6), 3s, rem(180));
+	}
+
+	&__count {
+		font-weight: $font-weight-bold;
+	}
+
+	&__item {
+		display: block;
+		background: white;
+		margin-bottom: $spacing-md;
+		border-radius: rem(4);
+		border: 1px solid $mist;
+		font-size: rem(14);
+		line-height: $line-height-14;
+		padding: $spacing-md;
+		position: relative;
+		color: $font-color-default;
+		z-index: $z-content + 1;
+		&:hover {
+			border-color: $mist-dark;
+			&:after {
+				opacity: 1;
+			}
+			text-decoration: none;
+		}
+		&:after {
+			transition: opacity $transition-duration $transition-easing;
+			position: absolute;
+			content: '';
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			opacity: 0;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 2px 6px rgba(0, 0, 0, 0.05);
+			z-index: $z-content;
+		}
+
+		&:focus {
+			outline: none;
+			box-shadow: $accessibility-box-shadow;
+			border-color: $mint;
+		}
+	}
+
+	&__id,
+	&__description,
+	&__meta {
+		padding-top: $spacing-sm;
+		overflow-wrap: break-word;
+		word-wrap: break-word;
+		-ms-word-break: break-all;
+		word-break: break-word;
+		&:empty {
+			display: none;
+		}
+	}
+	&__dates {
+		white-space: nowrap;
+	}
+	&__id {
+		padding-top: 0;
+	}
+	&__title {
+		font-weight: $font-weight-bold;
+		font-size: rem(16);
+		line-height: $line-height-16;
+		margin-bottom: $spacing-xs;
+	}
+	&__submitted {
+		color: $shade;
+	}
+
+	&__mode {
+		&:after {
+			content: ': ';
+		}
+	}
+	&__services-count,
+	&__stops-count,
+	&__created-date {
+		&:before {
+			content: ', ';
+		}
+	}
+	&__skeleton {
+		display: flex;
+		flex: 1 1 auto;
+		margin-bottom: $spacing-md * 2;
+		padding-top: rem(10);
+		padding-bottom: rem(2);
+		padding-left: $spacing-md;
+	}
+	&__skeleton-left {
+		@include skeleton(1, 14px, 10px, lighten($mist, 4), rgba(255, 255, 255, 0.6), 3s, rem(30));
+		margin-right: $spacing-md;
+	}
+	&__skeleton-right {
+		@include skeleton(3, 14px, 12px, lighten($mist, 4), rgba(255, 255, 255, 0.6), 3s, 60%);
+	}
+}
+
+@include bp($tablet) {
+	.reviews-list {
+		&__content {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+		}
+		&__id,
+		&__description,
+		&__dates {
+			padding-top: 0;
+			padding-right: $spacing-lg;
+			&:empty {
+				display: block;
+			}
+		}
+		&__item {
+			flex-direction: row;
+		}
+		&__id {
+			flex-basis: rem(60);
+			flex-grow: 0;
+			flex-shrink: 0;
+		}
+		&__description {
+			flex-grow: 1;
+			flex-basis: 40%;
+		}
+	}
+}
+@include bp($lg-desktop) {
+	.reviews-list {
+		&__meta {
+			display: flex;
+			flex-direction: row;
+		}
+	}
+}

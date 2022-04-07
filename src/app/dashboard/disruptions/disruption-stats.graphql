@@ -1,0 +1,121 @@
+query disruptionStats(
+	$first: Int!,
+	$after: String,
+	$severity: SeverityInput
+	) {
+	disruptionStats(severity: $severity) {
+		__typename
+		liveDisruptions(first: $first, after: $after) {
+			totalCount
+			edges {
+				node {
+					id
+					title
+					description
+					status
+					severity
+					validityPeriod {
+						id
+						startDate
+						endDate
+						startTime
+						endTime
+						days
+						finalDate
+						repetition
+					}
+					impact {
+						edges {
+							node {
+								id
+								name
+								mode
+								severity
+								operators {
+									edges {
+										node {
+											id
+										}
+									}
+								}
+								lines {
+									edges {
+										node {
+											id
+										}
+									}
+								}
+								stops {
+									edges {
+										node {
+											id
+											commonName
+											latitude
+											longitude
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		upcomingDisruptions(first: $first, after: $after) {
+			totalCount
+			edges {
+				node {
+					id
+					title
+					description
+					status
+					severity
+					validityPeriod {
+						id
+						startDate
+						endDate
+						startTime
+						endTime
+						days
+						finalDate
+						repetition
+					}
+					impact {
+						edges {
+							node {
+								id
+								name
+								mode
+								severity
+								operators {
+									edges {
+										node {
+											id
+										}
+									}
+								}
+								lines {
+									edges {
+										node {
+											id
+										}
+									}
+								}
+								stops {
+									edges {
+										node {
+											id
+											commonName
+											latitude
+											longitude
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

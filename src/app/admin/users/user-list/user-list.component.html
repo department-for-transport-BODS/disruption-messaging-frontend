@@ -1,0 +1,8 @@
+<dm-table
+	resource="user"
+	[rowData]="users$ | async"
+	[columnDefs]="columnDefs"
+	[loading]="usersService.loading$ | async"
+	(edit)="usersService.editUser($event)"
+	(delete)="usersService.deleteUser($event)">
+</dm-table>

@@ -1,0 +1,74 @@
+@import 'src/app/shared/styles/variables/variables';
+@import 'src/app/shared/styles/functions/functions';
+
+:host {
+	display: inline-flex;
+	appearance: none;
+}
+.icon-button {
+	// undoes the default <button> styling
+
+	border: 1px solid $shade-light;
+	background: transparent;
+	padding: $spacing-sm-withborder;
+	border-radius: rem(4);
+	margin: 0;
+	transition-property: background, color;
+	transition-duration: $transition-duration;
+	transition-timing-function: $transition-easing;
+	text-align: left;
+	vertical-align: bottom;
+	//line-height: $line-height-default;
+	color: $shade;
+	cursor: pointer;
+	&:focus {
+		color: $mint;
+		border-color: $mint;
+		box-shadow: $accessibility-box-shadow;
+		outline: 0;
+	}
+	&:hover,
+	&:active {
+		color: $mint;
+	}
+	&__icon {
+		width: rem(24);
+		height: rem(24);
+		display: block;
+	}
+	&--xs {
+		.icon-button__icon {
+			width: rem(8);
+			height: rem(8);
+		}
+	}
+	&--sm {
+		.icon-button__icon {
+			width: rem(16);
+			height: rem(16);
+		}
+	}
+	&--lg {
+		padding: $spacing-xs-withborder;
+		.icon-button__icon {
+			width: rem(32);
+			height: rem(32);
+		}
+	}
+
+	&--minimal {
+		border: 0 none;
+		padding: $spacing-sm;
+		&.icon-button--lg {
+			padding: $spacing-xs;
+		}
+		&:focus {
+			outline: $accessibility-outline;
+			outline-offset: $accessibility-offset;
+		}
+	}
+	&--active {
+		color: $mint;
+		border-color: $mint;
+	}
+}

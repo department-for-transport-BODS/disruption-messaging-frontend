@@ -1,0 +1,86 @@
+<div [formGroup]="filterGroup" class="filter form">
+	<input type="hidden" formControlName="isTemplate" />
+	<div class="filter__controls">
+		<dm-button
+			btnId="disruption-list-filter-toggle"
+			iconAfter="filter"
+			(onClick)="toggleFilterVisibility()"
+		>
+			Filters
+		</dm-button>
+		<label for="disruption-list-filter-search" aria-label="Search"></label>
+		<div class="filter__search">
+			<input
+				id="disruption-list-filter-search"
+				type="text"
+				placeholder="Search"
+				formControlName="searchText"
+				maxlength="250"
+			/>
+		</div>
+	</div>
+	<!-- DM-418: Use style.display instead of *ngIf -->
+	<div class="filter__panel" [style.display]="showFilters ? 'flex' : 'none'">
+		<div class="filter__options">
+			<div class="filter__input filter__input--date">
+				<input
+					autocomplete="off"
+					id="disruption-list-filter-date"
+					type="text"
+					class="form__control"
+					ngxDaterangepickerMd
+					formControlName="dateRange"
+					placeholder="Dates"
+					[locale]="dateRangePickerOptions"
+					[ranges]="dateRangePresets"
+					alwaysShowCalendars="true"
+					showClearButton="true"
+					showRangeLabelOnInput="true"
+				/>
+			</div>
+			<div class="filter__input filter__input--severity">
+				<select formControlName="severity" id="disruption-list-filter-severity">
+					<option value="">Severity (all)</option>
+					<option *ngFor="let option of filterSeverityCodes" value="{{ option.value }}">{{
+						option.title
+					}}</option>
+				</select>
+			</div>
+			<div class="filter__input filter__input--status">
+				<select formControlName="status" id="disruption-list-filter-status">
+					<option value="">Status (all)</option>
+					<option *ngFor="let option of filterStatusCodes" value="{{ option.value }}">{{
+						option.title
+					}}</option>
+				</select>
+			</div>
+			<div class="filter__input filter__input--mode">
+				<select formControlName="mode" id="disruption-list-filter-mode">
+					<option value="">Mode (all)</option>
+					<option *ngFor="let option of filterModeCodes" value="{{ option.value }}">{{
+						option.title
+					}}</option>
+				</select>
+			</div>
+			<div class="filter__input filter__input--operators">
+				<dm-autocomplete-operators
+					*ngIf="showFilters"
+					formControlName="operators"
+					id="disruption-list-filter-operators"
+				></dm-autocomplete-operators>
+			</div>
+			<div class="filter__input filter__input--services">
+				<dm-autocomplete-lines
+					*ngIf="showFilters"
+					formControlName="lines"
+					id="disruption-list-filter-services"
+				></dm-autocomplete-lines>
+			</div>
+			<div class="filter__clear">
+				<dm-button appearance="minimal" (onClick)="resetFilter()" btnId="disruption-list-filter-clear"
+					>Clear filters</dm-button
+				>
+			</div>
+		</div>
+	</div>
+</div>

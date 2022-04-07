@@ -1,0 +1,26 @@
+<div class="notification" [ngClass]="{ 'notification--read': status == 'Read' }">
+	<span
+		class="notification__status"
+		attr.aria-label="This notification {{ status == 'Read' ? 'is marked as read' : 'is unread' }}"
+	>
+	</span>
+	<a class="notification__link" routerLink="/disruption/{{id}}" (click)="this.onClick($event);">
+		<div *ngIf="type" class="notification__type">{{ type }}</div>
+		<div *ngIf="message && !duplicates.length" class="notification__message">{{ message }}</div>
+		<div *ngIf="duplicates && duplicates.length" class="notification__message">Disruption #{{ id }} has potential duplicates. </div>
+		<div *ngIf="duplicates && duplicates.length" class="notification__duplicates">
+			<ul *ngFor="let disruption of duplicates" class="notification__duplicate-item">
+				<li><a routerLink="/disruption/{{disruption}}" (click)="$event.stopPropagation()">Disruption #{{disruption}}</a></li>
+			</ul>
+		</div>
+		<div class="notification__footer">
+			<div *ngIf="date" class="notification__date">{{ date }}</div>
+			<dm-button
+				*ngIf="duplicates && duplicates.length && status !== 'Read'"
+				[appearance]="'minimal'"
+				class="notification__acknowledge-button"
+				(click)="this.acknowledge($event)"
+				>Acknowledge</dm-button>
+		</div>
+	</a>
+</div>

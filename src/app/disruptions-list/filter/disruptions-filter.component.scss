@@ -1,0 +1,91 @@
+@import 'src/app/shared/styles/variables/variables';
+@import 'src/app/shared/styles/functions/functions';
+.filter {
+	&__options {
+		display: flex;
+		flex-direction: row;
+		flex-grow: 1;
+		flex-wrap: wrap;
+		align-items: center;
+	}
+	&__search {
+		margin-top: $spacing-sm;
+		margin-bottom: $spacing-md;
+		max-width: rem(376);
+	}
+	&__controls {
+		display: flex;
+		flex-direction: column;
+	}
+	&__panel {
+		display: flex;
+		align-items: flex-end;
+		justify-content: flex-start;
+	}
+	&__input {
+		margin-bottom: $spacing-md;
+		max-width: rem(376);
+		&--severity,
+		&--date,
+		&--operators,
+		&--mode,
+		&--status,
+		&--services,
+		&--operators {
+			flex-basis: 100%;
+			margin-right: 0;
+		}
+	}
+	&__clear {
+		white-space: nowrap;
+		margin-bottom: $spacing-lg;
+		flex-basis: 100%;
+	}
+}
+
+@include bp($tablet) {
+	.filter {
+		&__controls {
+			flex-direction: row;
+			margin-bottom: $spacing-md;
+			margin-right: rem(96);
+			max-width: rem(376);
+		}
+		&__search {
+			margin-top: 0;
+			margin-bottom: 0;
+			margin-left: $spacing-md;
+		}
+		&__input {
+			margin-right: $spacing-sm;
+			&--date,
+			&--severity,
+			&--status,
+			&--mode {
+				flex-basis: 48%;
+			}
+			&--operators,
+			&--services {
+				flex-basis: 100%;
+			}
+		}
+		&__clear {
+			flex-basis: 100%;
+			margin-left: auto;
+		}
+	}
+}
+@include bp($lg-desktop) {
+	.filter {
+		&__controls {
+			display: flex;
+			justify-content: space-between;
+			flex-wrap: nowrap;
+			flex-direction: row;
+		}
+		&__options {
+			max-width: rem(960);
+			// flex: 0 0 75%;
+		}
+	}
+}

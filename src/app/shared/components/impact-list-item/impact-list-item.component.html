@@ -1,0 +1,79 @@
+<div class="impact-list-item">
+	<div class="impact-list-item__thumbnail">
+		<div class="impact-list-item__watermark">
+			<svg-icon src="assets/icons/{{ impact.mode | lowercase }}.svg"></svg-icon>
+		</div>
+		<div class="impact-list-item__type">{{ impact.type }}</div>
+	</div>
+	<div class="impact-list-item__description">
+		<div class="impact-list-item__details">
+			<div class="impact-list-item__col">
+				<div *ngIf="impact.operators.length" class="impact-list-item__row">
+					<div class="impact-list-item__label">Operators</div>
+					<div class="impact-list-item__value">{{ impact.operators.join(', ') }}</div>
+				</div>
+				<div *ngIf="impact.lines.length" class="impact-list-item__row">
+					<div class="impact-list-item__label">Services</div>
+					<div class="impact-list-item__value">{{ impact.lines.join(', ') }}</div>
+				</div>
+				<div *ngIf="impact.stopNames.length > 1" class="impact-list-item__row">
+					<div class="impact-list-item__label">Stops</div>
+					<div class="impact-list-item__value">{{ impact.stopNames.length }}</div>
+				</div>
+				<div *ngIf="impact.stopNames.length == 1" class="impact-list-item__row">
+					<div class="impact-list-item__label">Stop</div>
+					<div class="impact-list-item__value" *ngFor="let stop of impact.stopNames">{{ stop }}</div>
+				</div>
+			</div>
+			<div class="impact-list-item__col">
+				<div *ngIf="impact.delay" class="impact-list-item__row">
+					<div class="impact-list-item__label">Delay</div>
+					<div class="impact-list-item__value">{{ impact.delay }} minutes</div>
+				</div>
+				<div class="impact-list-item__row">
+					<div class="impact-list-item__label">Advice</div>
+					<div class="impact-list-item__value">{{ impact.advice }}</div>
+				</div>
+			</div>
+		</div>
+		<div *ngIf="editable" class="impact-list-item__buttons">
+			<dm-popover
+				triggerAccessibilityLabel="More options"
+				triggerIcon="overflow-menu"
+				triggerButtonAppearance="default"
+				triggerButtonSize="sm"
+				identifier="popover-{{ index }}"
+			>
+				<ul class="impact-list-item__menu">
+					<li class="impact-list-item__menu-item">
+						<a
+							style="cursor: pointer"
+							id="impactlist-item-{{ index }}-remove"
+							(click)="remove(index)"
+							class="impact-list-item__menu-link"
+							>Remove this impact</a
+						>
+					</li>
+					<li class="impact-list-item__menu-item">
+						<a
+							style="cursor: pointer"
+							id="impactlist-item-{{ index }}-duplicate"
+							(click)="duplicate(index)"
+							class="impact-list-item__menu-link"
+							>Add a similiar impact</a
+						>
+					</li>
+				</ul>
+			</dm-popover>
+			<div class="impact-list-item__edit">
+				<dm-button
+					btnId="impactlist-item-{{ index }}-edit"
+					appearance="primary"
+					size="sm"
+					(onClick)="edit(index)"
+					>Edit</dm-button
+				>
+			</div>
+		</div>
+	</div>
+</div>

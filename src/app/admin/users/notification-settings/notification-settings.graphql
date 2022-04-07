@@ -1,0 +1,19 @@
+query allNotificationSettings {
+	notificationSettings {
+		notificationType
+		email
+		inApp
+		id
+	}
+}
+
+mutation updateNotificationSettings($params: [NotificationSettingsInputType]) {
+	notificationSettings(params: $params) {
+		success
+		errors
+		data {
+			notificationType
+			id
+		}
+	}
+}

@@ -1,0 +1,35 @@
+mutation createOrganisation($params: OrganisationInput!) {
+	createOrganisation(params: $params) {
+		success
+		errors
+		data {
+			id
+			name
+			url
+			adminAreas {
+				name
+			}
+		}
+	}
+}
+
+mutation updateOrganisation($id: Int!, $params: OrganisationInput!) {
+	updateOrganisation(id: $id, params: $params) {
+		success
+		errors
+		data {
+			id
+			url
+			adminAreas {
+				name
+			}
+		}
+	}
+}
+
+mutation deleteOrganisation($id: Int!) {
+	deleteOrganisation(id: $id) {
+		success
+		errors
+	}
+}

@@ -1,0 +1,54 @@
+<h1 class="auth__app-name">Disruption Messaging</h1>
+<dm-card>
+	<div class="auth__card form">
+		<div class="form__group auth__group" [ngClass]="{ 'form__group--error': loginFailed }">
+			<label class="form__label" for="input_username">Username</label>
+			<input
+				id="input_username"
+				type="text"
+				placeholder="Username"
+				class="form__control form__control--lg"
+				name="loginUsername"
+				[(ngModel)]="username"
+				required
+				(keyup.enter)="submit()"
+				maxlength="100"
+			/>
+		</div>
+		<div class="form__group auth__group" [ngClass]="{ 'form__group--error': loginFailed }">
+			<label class="form__label" for="input_password">Password</label>
+			<input
+				id="input_password"
+				type="password"
+				placeholder="Password"
+				class="form__control form__control--lg"
+				name="loginPassword"
+				[(ngModel)]="password"
+				required
+				(keyup.enter)="submit()"
+				maxlength="100"
+			/>
+			<div class="form__validation">
+				<div *ngIf="loginFailed" class="form__feedback form__feedback--error">
+					{{ loginFailed }}
+				</div>
+			</div>
+		</div>
+		<div class="form__actions">
+			<ngx-spinner
+				id="login-spinner"
+				bdColor="rgba(222,225,234,0.6)"
+				size="small"
+				color="#00bbb0"
+				[fullScreen]="false"
+				>
+			</ngx-spinner>
+			<dm-button btnId="btn_submit" appearance="primary" size="lg" expand="true" (onClick)="submit()"
+				>Login</dm-button
+			>
+		</div>
+		<div class="forgot-password" style="padding-top: 1rem">
+			<a href="" (click)="forgotPassword($event)">Forgot password</a>
+		</div>
+	</div>
+</dm-card>

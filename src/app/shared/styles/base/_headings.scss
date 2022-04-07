@@ -1,0 +1,47 @@
+//
+// __HEADINGS.scss
+//
+// Base styling for html <h*> tags
+
+h1,
+h2,
+h3,
+h4 {
+	color: $gray-30;
+	font-weight: $font-weight-bold;
+}
+
+h1 {
+	font-size: rem(24);
+	line-height: ($global-lineheight-unit * 1.5) / 24;
+	margin: $spacing-md 0;
+	letter-spacing: rem(-1);
+}
+h2 {
+	font-size: rem(20);
+	line-height: ($global-lineheight-unit * 4/3) / 20;
+	margin: $spacing-md 0;
+	letter-spacing: rem(-0.5);
+}
+h3 {
+	font-size: rem(18);
+	line-height: $global-lineheight-unit / 18;
+	margin: $spacing-sm 0;
+}
+h4 {
+	font-size: $font-size-default;
+	line-height: $line-height-default;
+	margin: $spacing-sm 0;
+}
+
+@include bp($tablet) {
+	h1 {
+		font-size: rem(32);
+		line-height: $global-lineheight-unit * 2 / 32;
+	}
+	h2 {
+		font-size: rem(24);
+		line-height: ($global-lineheight-unit * 4/3) / 24;
+		margin: $spacing-md 0;
+	}
+}

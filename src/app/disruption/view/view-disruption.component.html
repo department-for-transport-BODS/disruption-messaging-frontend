@@ -1,0 +1,57 @@
+<div class="view-disruption__spinner">
+	<dm-spinner name='view-disruption' [show]="showSpinner"></dm-spinner>
+</div>
+<div *ngIf="disruption">
+	<dm-page-header title="{{ title }}">
+		<dm-button-group justify="right">
+			<dm-delete-disruption
+				[id]="id"
+				[redirectUrl]="deleteRedirectUrl"
+				[title]="disruption.title"
+				>
+			</dm-delete-disruption>
+			<dm-button appearance="minimal" (onClick)="onDuplicate()">{{ duplicateText }}</dm-button>
+			<dm-button appearance="primary" [routerLink]="['/disruption/edit/', id]">Edit</dm-button>
+		</dm-button-group>
+	</dm-page-header>
+
+	<dm-tabs>
+		<dm-tab title="Overview">
+			<dm-view-disruption-overview [disruption]="disruption"></dm-view-disruption-overview>
+		</dm-tab>
+		<dm-tab title="{{ impactTabTitle() }}">
+			<dm-view-disruption-impacts [disruption]="disruption"></dm-view-disruption-impacts>
+		</dm-tab>
+		<dm-tab title="{{ messageTabTitle() }}">
+			<dm-view-disruption-messaging [disruption]="disruption"></dm-view-disruption-messaging>
+		</dm-tab>
+	</dm-tabs>
+
+	<div class="view-disruption__review">
+		<h3 class="view-disruption__title">Review</h3>
+		<div class="grid">
+			<div class="grid__row">
+				<div class="grid__col--xs-12 grid__col--lg-10 grid__col--xl-8">
+					<div *ngIf="disruption && disruption.comments.length > 0">
+						<ng-container *ngFor="let comment of disruption.comments; let last = last">
+							<dm-comment
+								[author]="comment.username"
+								[date]="comment.createdDate"
+								[message]="comment.comment"
+								[last]="last"
+							></dm-comment>
+						</ng-container>
+					</div>
+				</div>
+			</div>
+			<dm-approve-reject-disruption
+				*ngIf="disruption && disruption.status == 'Draft Pending Approval'"
+				[id]="id"
+			></dm-approve-reject-disruption>
+		</div>
+	</div>
+</div>
+<div *ngIf="errors">
+	<h2>Disruption not found</h2>
+	<p>The disruption you’re looking for doesn’t exist or may have been deleted</p>
+</div>

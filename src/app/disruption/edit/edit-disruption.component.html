@@ -1,0 +1,147 @@
+<dm-page-header title="{{ title }}"></dm-page-header>
+<dm-spinner name='edit-disruption' [show]="editDisruptionService.loading$ | async"></dm-spinner>
+<form (ngSubmit)="onSubmit()" [formGroup]="disruptionForm">
+	<dm-tabs>
+		<dm-tab title="Overview">
+			<dm-overview formControlName="overviewGroup"></dm-overview>
+		</dm-tab>
+		<dm-tab title="Impacts">
+			<dm-impacts-list formControlName="impactGroup"></dm-impacts-list>
+		</dm-tab>
+		<dm-tab title="Messaging">
+			<dm-messaging formControlName="messagingGroup"></dm-messaging>
+		</dm-tab>
+	</dm-tabs>
+	<div class="edit__messages">
+		<dm-banner *ngIf="serverErrors" appearance="error">Server error: {{ serverErrors }}</dm-banner>
+		<dm-banner *ngIf="errorSubmittingDraft" appearance="error"
+			>Please fix the displayed errors before saving the draft
+		</dm-banner>
+		<dm-banner *ngIf="!disruptionForm.valid && formSubmittedForPublish" appearance="error">
+			<ul>
+				<li *ngIf="formErrors('overviewGroup') > 0">
+					Overview tab has
+					{{ formErrors('overviewGroup') }}
+					errors.
+				</li>
+				<li *ngIf="formErrors('impactGroup') > 0">At least one impact must be added.</li>
+				<li *ngIf="formErrors('messagingGroup') > 0">
+					Messaging tab has
+					{{ formErrors('messagingGroup') }}
+					errors.
+				</li>
+			</ul>
+		</dm-banner>
+	</div>
+	<dm-banner *ngIf="modified" appearance="success">
+		{{ modified }}
+	</dm-banner>
+	<div class="edit__nav grid grid__row">
+		<div class="edit__nav-section grid__col--xs-12 grid__col--sm-6">
+			<div *ngIf="currentTab !== 'Overview'" class="edit__nav-back">
+				<dm-button 	
+					class="edit__nav-section__button"
+					 (onClick)="onNavigate(-1)"
+					 btnId="disruption-edit-back"
+					 size="lg"
+				>Back </dm-button>
+			</div>
+			<dm-button
+				*ngIf="!isTemplateMode"
+				(onClick)="onSave()"
+				appearance="minimal"
+				id="disruption-edit-save-draft"
+				class="edit__nav-section__button"
+				type="button"
+			>
+				Save draft
+			</dm-button>
+		</div>
+		<div class="edit__nav-section grid__col--xs-12 grid__col--sm-6 edit__nav-section__buttons-right">
+			<ng-container *ngIf="currentTab !== 'Messaging'">
+				<dm-button
+					(onClick)="onNavigate(1)"
+					appearance="primary"
+					expand=true
+					btnId="disruption-edit-next"
+					class="edit__nav-section__button"
+				>
+					Next
+				</dm-button>
+			</ng-container>
+			<ng-container *ngIf="currentTab === 'Messaging'">
+				<dm-button
+					appearance="primary"
+					class="edit__nav-section__button"
+					expand=true
+					btnId="disruption-edit-submit"
+					type="submit"
+					*ngIf="!isTemplateMode"
+				>
+					Submit for publication
+				</dm-button>
+				<ngx-spinner
+					id="submit-spinner"
+					bdColor="rgba(222,225,234,0.6)"
+					size="medium"
+					color="#00bbb0"
+					[fullScreen]="false"
+					>
+				</ngx-spinner>
+				<dm-button
+					*ngIf="isTemplateMode"
+					class="edit__nav-section__button"
+					(onClick)="onSave()"
+					appearance="primary"
+					btnId="disruption-edit-save-draft"
+					type="button"
+				>
+					Save template
+				</dm-button>
+			</ng-container>
+		</div>
+	</div>
+	<ngx-smart-modal
+		customclass="modal"
+		identifier="submit-modal"
+		customClass="nsm-dialog-animation-fade nsm-dialog-narrow"
+	>
+		<div class="form">
+			<h2>
+				Submit for publication
+			</h2>
+			<div
+				class="form__group"
+				[ngClass]="{
+					'form__group--error':
+						propInvalid('submitComment') && submitComment.errors && submitComment.errors.profanity
+				}"
+			>
+				<label for="edit-disruption-modal-comment" class="form__label">Leave a comment (optional)</label>
+				<textarea
+					class="form__control"
+					formControlName="submitComment"
+					id="edit-disruption-modal-comment"
+				></textarea>
+				<div class="form__validation">
+					<div
+						*ngIf="submitComment.errors && submitComment.errors.profanity"
+						class="form__feedback form__feedback--error"
+					>
+						Please refrain from using profane words in text.
+					</div>
+				</div>
+			</div>
+			<div class="form__actions">
+				<dm-button-group justify="right">
+					<dm-button (onClick)="closeModal()" btnId="edit-disruption-modal-cancel">
+						Cancel
+					</dm-button>
+					<dm-button (onClick)="submitModal()" appearance="primary" btnId="edit-disruption-modal-submit"
+						>Submit
+					</dm-button>
+				</dm-button-group>
+			</div>
+		</div>
+	</ngx-smart-modal>
+</form>

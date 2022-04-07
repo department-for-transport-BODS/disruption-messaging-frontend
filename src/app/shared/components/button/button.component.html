@@ -1,0 +1,42 @@
+<ng-template #buttonContent>
+	<svg-icon
+		*ngIf="iconBefore"
+		class="button__icon button__icon--before"
+		src="assets/icons/{{ iconBefore }}.svg"
+	></svg-icon>
+	<span class="button__label">
+		<ng-content></ng-content>
+	</span>
+	<svg-icon
+		*ngIf="iconAfter"
+		class="button__icon button__icon--after"
+		src="assets/icons/{{ iconAfter }}.svg"
+	></svg-icon>
+</ng-template>
+
+<button
+	[attr.type]="type"
+	[attr.id]="btnId"
+	class="{{ buttonClasses }}"
+	(click)="onClickButton($event)"
+	[attr.aria-label]="accessibilityLabel"
+	[attr.aria-expanded]="accessibilityExpanded"
+	[disabled]="disabled"
+	*ngIf="!route && !url"
+	[ngClass]="{ 'button--active': active }"
+>
+	<ng-container *ngTemplateOutlet="buttonContent"></ng-container>
+</button>
+
+<a
+	[attr.id]="btnId"
+	class="{{ buttonClasses }}"
+	(click)="route ? gotoRoute($event, route) : null"
+	[attr.aria-label]="accessibilityLabel ? accessibilityLabel : null"
+	[ngClass]="{ 'button--active': active, 'button--disabled': disabled }"
+	*ngIf="route || url"
+	[attr.href]="url ? url : '#'"
+	[attr.target]="url ? '_blank' : null"
+>
+	<ng-container *ngTemplateOutlet="buttonContent"></ng-container>
+</a>

@@ -1,0 +1,43 @@
+$screen-xsm-min: 30em; // 480px Small mobile screen
+$screen-sm-min: 48em; // 768px Small screen / tablet
+$screen-md-min: 64em; // 1024px Medium screen / desktop
+$screen-lg-min: 78.125em; // 1250 Medium desktop
+$screen-xl-min: 90em; //1400px Large screen / wide desktop
+
+// So media queries don't overlap when required, provide a maximum
+$screen-xsm-max: ($screen-sm-min - 0.05em);
+$screen-sm-max: ($screen-md-min - 0.05em);
+$screen-md-max: ($screen-lg-min - 0.05em);
+$screen-lg-max: ($screen-xl-min - 0.05em);
+
+$phablet: (
+	media: $screen-xsm-min
+); //larger mobile - 480px upwards
+$phablet-only: (
+	media: $screen-xsm-max
+); // larger mobile only up to 320px - 479px
+$phablet-to-desktop: (
+	media: '(min-width: #{$screen-xsm-min}) and (max-width: #{$screen-sm-max})'
+); // from phablet to small desktop - useful for targetting tablet only
+$to-tablet: (
+	media: '(max-width: #{$screen-xsm-max} )'
+); // small screen devices only up to 767px
+$tablet: (
+	media: $screen-sm-min
+); // tablet devices - 768px upwards
+$tablet-only: (
+	media: '(min-width: #{$screen-sm-min}) and (max-width: #{$screen-sm-max})'
+); // from tablet to small desktop - useful for targetting tablet only
+$to-desktop: (
+	media: '(max-width: #{$screen-sm-max})'
+); // small screen devices only up to 1024px
+$desktop: (
+	media: $screen-md-min
+); // small desktop - 1024px upwards
+$lg-desktop: (
+	media: $screen-lg-min
+); // large desktop - 1200px upwards
+$xl-desktop: (
+	media: $screen-xl-min
+);
+$breakpoint-grid-prefix: $phablet sm, $tablet md, $desktop lg, $lg-desktop xl;

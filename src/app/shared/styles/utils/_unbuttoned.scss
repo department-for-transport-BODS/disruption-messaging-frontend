@@ -1,0 +1,20 @@
+//
+// __UNBUTTONED.scss
+//
+// Helper class to undo default buttons styling.
+
+.unbuttoned {
+	// undoes the default <button> styling
+	border: 0 none;
+	background: transparent;
+	display: flex;
+	align-items: center;
+	padding: 0;
+	margin: 0;
+	transition-property: background, color;
+	transition-duration: $transition-duration;
+	transition-timing-function: $transition-easing;
+	text-align: left;
+	vertical-align: bottom;
+	line-height: $global-lineheight-mulitplier;
+}

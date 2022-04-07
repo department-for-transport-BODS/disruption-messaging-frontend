@@ -1,0 +1,6 @@
+<div class="popover">
+	<ul class="popover__dropdown list-group" *ngIf="show">
+		<li class="popover__menu list-group-item" *ngFor="let item of popoverList; let itemIndex = index"><span class="popover__item" tabindex="0" data-toggle="tab" >{{item}}</span></li>
+
+	</ul>
+</div>

@@ -1,0 +1,86 @@
+@import 'src/app/shared/styles/variables/variables';
+@import 'src/app/shared/styles/functions/functions';
+
+.tabs {
+	&--light {
+		.tabs__item {
+			&--active {
+				.tabs__button {
+					background: white;
+				}
+			}
+		}
+		&:after {
+			background: darken($mist-lighter, 10);
+		}
+	}
+
+	display: flex;
+	margin: 0;
+	padding: 0;
+	white-space: nowrap;
+	margin-bottom: rem(40);
+	margin-top: $spacing-md;
+	list-style: none;
+	position: relative;
+	&__item {
+		position: relative;
+		&--active {
+			.tabs__button {
+				&--light {
+					background: white;
+				}
+				box-shadow: inset 0 2px 1px 1px $mist-dark;
+				background: $mist-lighter;
+				color: $shade-darker;
+				font-weight: $font-weight-semibold;
+				pointer-events: none;
+				outline: none;
+				&:after {
+					content: '';
+					position: absolute;
+					background: $mint;
+					top: 0;
+					right: 0;
+					left: 0;
+					height: 3px;
+				}
+			}
+		}
+	}
+	&__button {
+		font-weight: $font-weight-default;
+		box-shadow: inset 0 -1px 0 0 $mist-dark;
+		border: 0 none;
+		transition-property: box-shadow;
+		transition-duration: $transition-duration;
+		transition-timing-function: $transition-easing;
+		padding: $spacing-md 2vw;
+		color: inherit;
+		background: darken($mist-lighter, 6);
+		user-select: none;
+		overflow: hidden;
+		&:hover {
+			cursor: pointer;
+			background: $mist-light;
+		}
+		&:focus {
+			outline: 1px solid $mint;
+			outline-offset: -1px;
+			// border
+		}
+	}
+	&:after {
+		content: '';
+		flex-grow: 1;
+		box-shadow: inset 0 -1px 0 0 $mist-dark;
+		background: darken($mist-lighter, 6);
+	}
+}
+@include bp($tablet) {
+	.tabs {
+		&__button {
+			padding: $spacing-md $spacing-xl;
+		}
+	}
+}

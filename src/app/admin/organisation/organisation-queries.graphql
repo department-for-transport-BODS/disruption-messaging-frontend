@@ -1,0 +1,18 @@
+query allAdminAreas {
+	allAdminAreas {
+		name
+		areaCode
+	}
+}
+
+query organisationList {
+	allOrganisations {
+		id
+		name
+		url
+		adminAreas {
+			name
+			areaCode
+		}
+	}
+}

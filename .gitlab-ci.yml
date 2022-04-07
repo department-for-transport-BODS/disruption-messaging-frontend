@@ -1,0 +1,130 @@
+stages:
+  - test
+  - publish
+
+variables:
+  VERSION: 1.4.0
+
+test:latest:
+  stage: test
+  image: trion/ng-cli-karma
+  artifacts:
+    paths:
+      - dist/
+  cache:
+    key: ${CI_JOB_ID}
+    paths:
+      - node_modules
+  before_script:
+    - apt-get update && apt-get install -y git
+    - npm i -g @angular/cli
+  script:
+    - npm install; npm rebuild;
+    - node src/version.ts;
+    - npm run test:ci || true;
+    - ng build --prod; cd -;
+  only:
+    - pushes
+    - develop
+  except:
+    - tags
+    - master
+    - /^release/.*$/
+
+test:production:
+  stage: test
+  image: trion/ng-cli-karma
+  artifacts:
+    paths:
+      - dist/
+  cache:
+    key: ${CI_JOB_ID}
+    paths:
+      - node_modules
+  before_script:
+    - apt-get update && apt-get install -y git
+    - npm i -g @angular/cli
+  script:
+    - npm install; npm rebuild;
+    - node src/version.ts;
+    - npm run test:ci || true;
+    - ng build --prod; cd -;
+  only:
+    - tags
+    - master
+    - /^release/.*$/
+
+publish:latest:
+  stage: publish
+  dependencies:
+    - test:latest
+  variables:
+    DOCKER_DRIVER: overlay2
+    LATEST_IMAGE: $REPOSITORY_URL:$VERSION.$CI_PIPELINE_ID
+    LATEST_TAG: $REPOSITORY_URL:latest
+    USE_DOCKER: 'yes'
+  image: docker:18
+  services:
+    - docker:18-dind
+  before_script:
+    - apk add --update --no-cache curl jq python py-pip git
+    - pip install awscli
+    - $(aws ecr get-login --no-include-email --region eu-west-1)  # will pick up secret keys set in GitLab UI
+    - docker info
+  script:
+    - docker build --file docker/production/Dockerfile --tag $LATEST_IMAGE .
+    - docker push $LATEST_IMAGE
+    - docker tag $LATEST_IMAGE $LATEST_TAG
+    - docker push $LATEST_TAG
+  only:
+    - develop
+
+publish:release:
+  stage: publish
+  dependencies:
+    - test:production
+  variables:
+    DOCKER_DRIVER: overlay2
+    RELEASE_IMAGE: $REPOSITORY_URL:$VERSION.$CI_PIPELINE_ID
+    RELEASE_TAG: $REPOSITORY_URL:release_v$VERSION
+    USE_DOCKER: 'yes'
+  image: docker:18
+  services:
+    - docker:18-dind
+  before_script:
+    - apk add --update --no-cache curl jq python py-pip git
+    - pip install awscli
+    - $(aws ecr get-login --no-include-email --region eu-west-1)  # will pick up secret keys set in GitLab UI
+    - docker info
+  script:
+    - docker build --file docker/production/Dockerfile --tag $RELEASE_IMAGE .
+    - docker push $RELEASE_IMAGE
+    - docker tag $RELEASE_IMAGE $RELEASE_TAG
+    - docker push $RELEASE_TAG
+  only:
+    - /^release/.*$/
+
+publish:production:
+  stage: publish
+  dependencies:
+    - test:production
+  variables:
+    DOCKER_DRIVER: overlay2
+    PROD_IMAGE: $REPOSITORY_URL:$VERSION.$CI_PIPELINE_ID
+    PROD_TAG: $REPOSITORY_URL:stable
+    USE_DOCKER: 'yes'
+  image: docker:18
+  services:
+    - docker:18-dind
+  before_script:
+    - apk add --update --no-cache curl jq python py-pip git
+    - pip install awscli
+    - $(aws ecr get-login --no-include-email --region eu-west-1)  # will pick up secret keys set in GitLab UI
+    - docker info
+  script:
+    - docker build --file docker/production/Dockerfile --tag $PROD_IMAGE .
+    - docker push $PROD_IMAGE
+    - docker tag $PROD_IMAGE $PROD_TAG
+    - docker push $PROD_TAG
+  only:
+    - tags

@@ -1,0 +1,42 @@
+query enumValues {
+	enumValues {
+		id
+		type
+		values
+		allValues
+	}
+}
+
+mutation setEnums($params: [EnumOverridesInput]!) {
+	setEnumOverrides(params: $params) {
+		success
+		errors
+		data {
+			id
+			type
+			values
+			allValues
+		}
+	}
+}
+
+query userUsageInformation($fromDate: DateTime, $toDate: DateTime) {
+	allUsers {
+		id
+		username
+		email
+		roles {
+			id
+			name
+			scope
+		}
+		organisation {
+			id
+			name
+		}
+		lastLogin
+    	numDisruptionsEntered(fromDate: $fromDate, toDate: $toDate)
+    	numDisruptionsApproved(fromDate: $fromDate, toDate: $toDate)
+	}
+}
+

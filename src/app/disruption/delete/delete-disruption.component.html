@@ -1,0 +1,32 @@
+<dm-button *ngIf="id" btnId="delete-disruption" appearance="minimal" (click)="onDeleteButton()">Delete</dm-button>
+
+<ngx-smart-modal customClass="modal" identifier="delete-modal" *ngIf="id" (onAnyCloseEvent)="resetState()">
+	<div [ngSwitch]="status">
+		<div *ngSwitchCase="'confirm'" class="form">
+			<h1>Permanently delete this disruption?</h1>
+			<p>
+				Once you have deleted disruption <strong class="wrap-text">#{{ id }} {{ title }}</strong> you will not
+				be able to undo this.
+			</p>
+			<div class="delete-form__actions form__actions">
+				<div class="delete-form__cancel">
+					<dm-button btnId="disruption-delete-cancel" (onClick)="onCancel()">Cancel</dm-button>
+				</div>
+				<div class="delete-form__ok">
+					<dm-button btnId="disruption-delete-OK" appearance="warning" (onClick)="onOK()">Delete</dm-button>
+				</div>
+			</div>
+		</div>
+		<dm-spinner name='delete-disruption' [show]="deleteDisruptionService.loading$ | async"></dm-spinner>
+		<div *ngSwitchCase="'success'">
+			<h1>Disruption deleted</h1>
+			<dm-button btnId="disruption-delete-complete" (onClick)="onComplete()">OK</dm-button>
+		</div>
+		<div *ngSwitchCase="'error'">
+			<h1>An error occured</h1>
+			<p>The disruption was not deleted. Server reported the following error:</p>
+			<p class="error">{{ serverErrors }}</p>
+			<dm-button btnId="disruption-delete-close-errors" (onClick)="onComplete()">Close</dm-button>
+		</div>
+	</div>
+</ngx-smart-modal>

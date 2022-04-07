@@ -1,0 +1,29 @@
+<dm-mailing-list-list id="mailing-list-list"></dm-mailing-list-list>
+
+<div class="mt-md">
+	<dm-button btnId="ml-entry-add" (onClick)="service.addEntry()" appearance="primary"
+		>Add new</dm-button
+	>
+</div>
+
+<ngx-smart-modal
+	id="ml-edit-modal"
+	[identifier]="'mlModal'"
+	[closable]="false"
+	[escapable]="false"
+	[dismissable]="false"
+	customClass="nsm-dialog-animation-fade nsm-dialog-narrow"
+>
+	<dm-mailing-list-edit id="ml-edit-dialog"></dm-mailing-list-edit>
+</ngx-smart-modal>
+
+<ngx-smart-modal
+	id="ml-delete-confirm-modal"
+	[identifier]="'mlDeleteModal'"
+	[closable]="false"
+	[escapable]="false"
+	[dismissable]="false"
+	customClass="nsm-dialog-animation-fade nsm-dialog-narrow"
+>
+	<dm-mailing-list-delete></dm-mailing-list-delete>
+</ngx-smart-modal>

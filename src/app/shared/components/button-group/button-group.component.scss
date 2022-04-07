@@ -1,0 +1,48 @@
+@import 'src/app/shared/styles/variables/variables';
+@import 'src/app/shared/styles/functions/functions';
+
+/*------------------------------------*\
+    BUTTON GROUP
+\*------------------------------------*/
+/*
+VARIABLES       Component-specific variables
+COMPOSITIONS    Core button styles
+OUTPUTS         Outputted components
+PROPS           Presentation modifiers
+
+//*******************************/
+// VARIABLES
+//*******************************//
+
+$buttonGroup-spacing: $spacing-md;
+
+//*******************************//
+// OUTPUT
+//*******************************//
+
+.button-group {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: flex-start;
+	margin-top: $buttonGroup-spacing * -1;
+	margin-left: $buttonGroup-spacing * -1;
+}
+
+//*******************************//
+// PROPS
+//*******************************//
+
+// Note: <Button> also has styling to space the buttons out when it can see .button-group
+// as a parent selector. It's not possible to do this the other way round because it's limited
+// by piercing shadow-dom restrictions.
+
+// Prop: justify ["left", "center", "right"]
+
+.button-group--center {
+	justify-content: center;
+}
+
+.button-group--right {
+	justify-content: flex-end;
+}

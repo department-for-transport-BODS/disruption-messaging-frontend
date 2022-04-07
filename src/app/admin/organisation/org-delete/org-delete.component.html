@@ -1,0 +1,20 @@
+<div id="organisation-delete-dialog" class="form">
+	<h2>Delete organisation</h2>
+	<p>
+		This action cannot be undone. Are you sure you want to delete
+		{{ organisation && organisation.name ? 'the organisation ' + organisation.name : 'this organisation' }}?
+	</p>
+	<dm-spinner name='delete-organisation' [show]="orgService.loading$ | async"></dm-spinner>
+	<dm-banner *ngIf="orgService.errors$ | async as errors" appearance="error">{{ errors }}</dm-banner>
+	<dm-banner *ngIf="orgService.serverResponse$ | async" appearance="success">
+		<span>Organisation has been deleted.</span>
+	</dm-banner>
+	<div class="form__actions">
+		<dm-button-group justify="right">
+			<dm-button btnId="edit-org-modal-cancel" (onClick)="orgService.deleteModalClose()">Close</dm-button>
+			<dm-button appearance="warning" btnId="delete-org-modal-submit" (onClick)="confirmDelete()"
+				>Delete</dm-button
+			>
+		</dm-button-group>
+	</div>
+</div>

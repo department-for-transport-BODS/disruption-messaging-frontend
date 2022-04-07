@@ -1,0 +1,49 @@
+// https://www.ag-grid.com/javascript-grid-styling/#what-to-style-via-themes
+
+$ag-icon-asc: '\E92E';
+$ag-icon-desc: '\E92b';
+
+// Sizing
+$grid-size: 8px;
+$icon-size: 24px;
+$header-height: $grid-size * 6;
+$row-height: $grid-size * 6;
+$row-border-width: 1px;
+
+$cell-horizontal-padding: $grid-size * 1;
+$virtual-item-height: $grid-size * 5;
+$header-icon-size: 14px;
+
+// Fonts
+$font-family: $font-family-default;
+$font-size: 15px;
+$font-weight: $font-weight-default;
+
+$secondary-font-family: $font-family-default;
+$secondary-font-size: 14px; // font-secondary-size
+$secondary-font-weight: $font-weight-semibold; // font-secondary-weight
+
+// Colors
+$foreground-color: $font-color-default;
+$secondary-foreground-color: white;
+$disabled-foreground-color: $shade-light;
+$header-background-color: $shade;
+$header-cell-hover-background-color: darken($header-background-color, 10%);
+$header-cell-moving-background-color: $header-cell-hover-background-color;
+$header-foreground-color: $secondary-foreground-color;
+
+$primary-color: $mint;
+$border-color: $mist;
+$icon-color: $mint;
+
+$hover-color: rgba($mist-light, 0.5);
+$selected-color: $mist-light;
+
+@import '~ag-grid-community/src/styles/ag-grid.scss';
+@import '~ag-grid-community/src/styles/ag-theme-material/sass/ag-theme-material.scss';
+
+// auto column widths is slightly broken if you don't have horizontal scroll supressed.
+// This allows the viewport to take account of the vertical scroll bar to fix it
+.ag-center-cols-viewport {
+	width: calc(100% + 22px) !important;
+}

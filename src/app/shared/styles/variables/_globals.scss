@@ -1,0 +1,8 @@
+// globals contains shared vars on which other things are calculated
+
+$global-type-unit: 16;
+$global-spacing-unit: 8;
+$global-lineheight-unit: 24;
+$global-lineheight-mulitplier: $global-lineheight-unit/$global-type-unit; // 1.5
+
+$global-border-color: $mist;

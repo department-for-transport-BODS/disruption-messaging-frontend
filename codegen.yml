@@ -1,0 +1,41 @@
+overwrite: true
+schema:
+    - 'http://localhost:8000/graphql/'
+    - 'local-storage.graphql'
+documents: 'src/**/*.graphql'
+generates:
+    src/generated/graphql.ts:
+        config:
+            typesPrefix: I
+            enumValues:
+                IDisruptionImpactCondition: ./enum-overrides#IDisruptionImpactCondition
+                DisruptionImpactCondition: ./enum-overrides#IDisruptionImpactCondition
+                IDisruptionImpactMode: ./enum-overrides#IDisruptionImpactMode
+                DisruptionImpactMode: ./enum-overrides#IDisruptionImpactMode
+                IDisruptionImpactSeverity: ./enum-overrides#IDisruptionImpactSeverity
+                DisruptionImpactSeverity: ./enum-overrides#IDisruptionImpactSeverity
+                IDisruptionReason: ./enum-overrides#IDisruptionReason
+                DisruptionReason: ./enum-overrides#IDisruptionReason
+                IDisruptionStatus: ./enum-overrides#IDisruptionStatus
+                DisruptionStatus: ./enum-overrides#IDisruptionStatus
+                IDisruptionType: ./enum-overrides#IDisruptionType
+                DisruptionType: ./enum-overrides#IDisruptionType
+                ISocialMessagePlatform: ./enum-overrides#ISocialMessagePlatform
+                SocialMessagePlatform: ./enum-overrides#ISocialMessagePlatform
+                IStopPointType: ./enum-overrides#IStopPointType
+                StopPointType: ./enum-overrides#IStopPointType
+                IDisruptionNotificationStatus: ./enum-overrides#IDisruptionNotificationStatus
+                DisruptionNotificationStatus: ./enum-overrides#IDisruptionNotificationStatus
+                IDisruptionNotificationMessageType: ./enum-overrides#IDisruptionNotificationMessageType
+                DisruptionNotificationMessageType: ./enum-overrides#IDisruptionNotificationMessageType
+                IHootSuiteProfileProfileType: ./enum-overrides#IHootSuiteProfileProfileType
+                HootSuiteProfileProfileType: ./enum-overrides#IHootSuiteProfileProfileType
+                IRoleScope: ./enum-overrides#IRoleScope
+                RoleScope: ./enum-overrides#IRoleScope
+        plugins:
+            - 'typescript'
+            - 'typescript-operations'
+            - 'typescript-apollo-angular'
+    src/generated/graphql.schema.json:
+        plugins:
+            - 'introspection'

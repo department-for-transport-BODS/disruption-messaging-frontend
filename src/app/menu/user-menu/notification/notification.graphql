@@ -1,0 +1,9 @@
+mutation readNotification($id: ID!) {
+	readNotification(id: $id) {
+		success
+		errors
+		data {
+			id
+		}
+	}
+}

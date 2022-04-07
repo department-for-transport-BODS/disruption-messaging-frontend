@@ -1,0 +1,33 @@
+<div [formGroup]="impactsGroup">
+	<div formArrayName="impacts">
+		<h2 *ngIf="impactsArr.length">
+			Impacted Services <span>({{ impactsArr.length }})</span>
+		</h2>
+		<div class="grid__row" *ngFor="let impact of impactReadOnly; let i = index">
+			<div class="grid__col--xs-12">
+				<dm-impact-list-item
+					[impact]="impact"
+					[index]="i"
+					(editEmit)="openModal(i)"
+					(removeEmit)="removeImpact(i)"
+					(duplicateEmit)="duplicate(i)"
+					[editable]="true"
+				></dm-impact-list-item>
+			</div>
+		</div>
+	</div>
+	<div class="impacts-list impacts-list--skeleton">
+		<dm-button btnId="impacts-list-add" appearance="primary" (click)="newImpact()">Add impact</dm-button>
+	</div>
+</div>
+<div [formGroup]="impactsGroup">
+	<ngx-smart-modal
+		customClass="modal"
+		identifier="impact-modal"
+		[dismissable]="false"
+		[escapable]="false"
+		(onAnyCloseEvent)="unloadCurrentImpact()"
+	>
+		<dm-impact formControlName="currentImpact" (cancel)="closeModal()" (save)="saveAndCloseModal()"></dm-impact>
+	</ngx-smart-modal>
+</div>

@@ -1,0 +1,55 @@
+<dm-card id="dashboard-activity-feed">
+	<dm-card-header>Activity Feed</dm-card-header>
+	<ng-container id="activity-feed-list" *ngIf="auditHistoryLog$ | async as data; else loading">
+		<ng-container *ngIf="data.length; else noItems">
+			<ul class="activity-feed-dashboard__list">
+				<li *ngFor="let log of data; let i = index">
+					<div class="activity-feed-dashboard__item">
+						<div class="activity-feed-dashboard__title">
+							<svg-icon src="assets/icons/user.svg" class="activity-feed-dashboard__icon"></svg-icon>
+							<div class="activity-feed-dashboard__username">
+								<h4>
+									{{ log.username }}
+								</h4>
+							</div>
+							<div class="activity-feed-dashboard__time">
+								{{ log.timestampFromNow }}
+							</div>
+						</div>
+						<div class="activity-feed-dashboard__message">
+							<div>
+								<strong>{{ log.action }}: </strong>
+								<a *ngIf="log.link" [routerLink]="[log.link]">{{ log.contentType }}#{{ log.objectId }}</a>
+								<span *ngIf="!log.link">{{ log.contentType }} <i>{{ log.objectRepr }}</i></span>
+							</div>
+							<ul>
+								<li *ngFor="let change of log.fieldChanges; let i = index">
+									<span *ngIf="change.action === 'Changed' else added_or_deleted">
+										{{ change.action }} {{ change.field }}:
+										<span class="activity-feed-dashboard__field_value">{{ change.oldValue }}</span> to
+										<span class="activity-feed-dashboard__field_value">{{ change.newValue }}</span>
+									</span>
+									<ng-template #added_or_deleted>
+										{{ change.action }} {{ change.field }}:
+										 <span class="activity-feed-dashboard__field_value">{{ change.newValue }}</span>
+									</ng-template>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</ng-container>
+		<ng-template #noItems>
+			<div class="activity-feed-dashboard__item-none">
+				<i>Get working!</i>
+			</div>
+		</ng-template>
+	</ng-container>
+	<ng-template #loading>
+		<div class="activity-feed-dashboard__skeleton">
+			<div class="activity-feed-dashboard__skeleton-left"></div>
+			<div class="activity-feed-dashboard__skeleton-right"></div>
+		</div>
+	</ng-template>
+</dm-card>

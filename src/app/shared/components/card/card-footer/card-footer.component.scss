@@ -1,0 +1,6 @@
+@import 'src/app/shared/styles/variables/variables';
+@import 'src/app/shared/styles/functions/functions';
+.card-footer {
+	border-top: 1px solid $mist;
+	padding: $spacing-sm $spacing-md;
+}

@@ -1,0 +1,7 @@
+query linesList {
+	allLines {
+		entityId
+		name
+		featureName
+	}
+}

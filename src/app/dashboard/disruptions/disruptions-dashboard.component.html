@@ -1,0 +1,80 @@
+<dm-card id="dashboard-disruptions">
+	<dm-card-header [actionBtnRoute]="['/disruptions/']" actionBtnId="dashboard-disruptions-view-all"
+		>Disruptions</dm-card-header
+	>
+	<div class="dashboard-disruptions__inner">
+		<div class="dashboard-disruptions__details">
+			<div class="dashboard-disruptions__tabs">
+				<button
+					class="unbuttoned dashboard-disruptions__tab"
+					id="dashboard-disruptions-live"
+					(click)="type = 'live'; loadData()"
+					aria-label="View live disruptions"
+					[ngClass]="{ 'dashboard-disruptions__tab--active': type == 'live' }"
+				>
+					Live
+				</button>
+				<button
+					class="unbuttoned dashboard-disruptions__tab"
+					id="dashboard-disruptions-upcoming"
+					(click)="type = 'upcoming'; loadData()"
+					aria-label="View upcoming disruptions"
+					[ngClass]="{ 'dashboard-disruptions__tab--active': type == 'upcoming' }"
+				>
+					Upcoming
+				</button>
+			</div>
+			<div class="dashboard-disruptions__list">
+				<div *ngIf="tableData$ | async as data; else loading">
+					<ng-container *ngIf="data.length; else noItems">
+						<disruption-summary
+							*ngFor="let item of data; let i = index"
+							id="dashboard-disruption-item-{{ i }}"
+							[data]="item"
+						></disruption-summary>
+					</ng-container>
+					<ng-template #noItems>No {{ type }} disruptions found.</ng-template>
+				</div>
+				<ng-template #loading>
+					<div class="dashboard-disruptions__skeleton">
+						<div class="dashboard-disruptions__skeleton-left"></div>
+						<div class="dashboard-disruptions__skeleton-right"></div>
+					</div>
+					<div class="dashboard-disruptions__skeleton">
+						<div class="dashboard-disruptions__skeleton-left"></div>
+						<div class="dashboard-disruptions__skeleton-right"></div>
+					</div>
+					<div class="dashboard-disruptions__skeleton">
+						<div class="dashboard-disruptions__skeleton-left"></div>
+						<div class="dashboard-disruptions__skeleton-right"></div>
+					</div>
+				</ng-template>
+				<div *ngIf="!tableData$">
+					<p>No disruptions found.</p>
+				</div>
+			</div>
+			<dm-card-footer>
+				<label for="disruption-stats-filter-severity" aria-label="Severity"></label>
+				<select
+					name="Severity"
+					[(ngModel)]="severity"
+					(ngModelChange)="severityChanged()"
+					id="disruption-stats-filter-severity"
+				>
+					<option [ngValue]="undefined">Severity (All)</option>
+					<option *ngFor="let option of filterSeverityCodes" value="{{ option.value }}">{{
+						option.title
+					}}</option>
+				</select>
+			</dm-card-footer>
+		</div>
+		<div class="dashboard-disruptions__map">
+			<dm-disruptions-map
+				class="dashboard-disruptions-map"
+				style="height: 100%; width: 100%"
+				[data]="mapData$ | async"
+				(iconClick)="onIconClick($event)"
+			></dm-disruptions-map>
+		</div>
+	</div>
+</dm-card>

@@ -1,0 +1,53 @@
+query organisationActivity {
+	organisationAudit {
+		edges {
+			node {
+				id
+				actor {
+					id
+					username
+				}
+				action
+				contentType {
+					id
+					name
+				}
+				objectPk
+				objectRepr
+				objectId
+				changedFields {
+					field
+					oldValue
+					newValue
+				}
+				timestamp
+			}
+		}
+	}
+}
+
+query disruptionAuditById($id: ID!) {
+	disruptionAudit(id: $id) {
+		edges {
+			node {
+				id
+				actor {
+					id
+					username
+				}
+				action
+				contentType {
+					id
+					name
+				}
+				objectPk
+				changedFields {
+					field
+					oldValue
+					newValue
+				}
+				timestamp
+			}
+		}
+	}
+}

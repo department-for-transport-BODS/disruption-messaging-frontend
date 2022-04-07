@@ -1,0 +1,44 @@
+query allUsers {
+	allUsers {
+		id
+		username
+		email
+		roles {
+			id
+			name
+			scope
+		}
+		organisation {
+			id
+			name
+		}
+		transmodelRestrictions {
+			id
+			type
+			entityId
+			name
+		}
+	}
+}
+
+query allRoles {
+	allRoles {
+		id
+		name
+		scope
+	}
+}
+
+query allOrganistions {
+	allOrganisations {
+		id
+		name
+	}
+}
+
+query InvitationByKey($key: String!) {
+	invitationByKey(key: $key) {
+		id
+		key
+	}
+}

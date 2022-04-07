@@ -1,0 +1,440 @@
+<div [formGroup]="overview" class="form form--relaxed">
+	<div class="grid">
+		<div class="grid__row">
+			<div class="grid__col--xs-12 grid__col--lg-10 grid__col--xl-8">
+				<div
+					class="form__group form__group--with-counter"
+					[ngClass]="{ 'form__group--error': propInvalid('summary') }"
+				>
+					<label class="form__label" for="disruption-summary">Summary:</label>
+					<input id="disruption-summary" class="form__control" type="text" formControlName="summary" maxlength="160"/>
+					<div class="form__validation">
+						<div
+							*ngIf="propInvalid('summary') && summary.errors.maxlength"
+							class="form__feedback form__feedback--error"
+						>
+							Summary must be no more than 160 characters
+						</div>
+						<div
+							*ngIf="propInvalid('summary') && summary.errors.required"
+							class="form__feedback form__feedback--error"
+						>
+							This field is required.
+						</div>
+						<div
+							*ngIf="propInvalid('summary') && summary.errors.leadingSpace"
+							class="form__feedback form__feedback--error"
+						>
+							Invalid summary.
+						</div>
+						<div
+							*ngIf="propInvalid('summary') && summary.errors.profanity"
+							class="form__feedback form__feedback--error"
+						>
+							Please refrain from using profane words in text.
+						</div>
+						<div
+							*ngIf="propInvalid('summary') && summary.errors.nonAscii"
+							class="form__feedback form__feedback--error"
+						>
+							Non-printable character <i>{{summary.errors.nonAscii}}</i> is not allowed.
+						</div>
+						<div
+							class="form__counter"
+							[ngClass]="{ 'form__counter--error': summary.value && summary.value.length > 160 }"
+						>
+							{{ summary.value ? summary.value.length : 0 }} / 160 characters
+						</div>
+					</div>
+				</div>
+				<div
+					class="form__group form__group--with-counter"
+					[ngClass]="{
+						'form__group--error':
+							propInvalid('description') &&
+							(submittedForPublish || description.errors.maxlength || description.errors.profanity || description.errors.nonAscii)
+					}"
+				>
+					<label class="form__label" for="disruption-description">Description:</label>
+					<textarea
+						id="disruption-description"
+						class="form__control"
+						formControlName="description"
+					></textarea>
+					<div class="form__validation">
+						<div
+							*ngIf="propInvalid('description') && submittedForPublish && description.errors.required"
+							class="form__feedback form__feedback--error"
+						>
+							This field is required.
+						</div>
+						<div
+							*ngIf="propInvalid('description') && description.errors.maxlength"
+							class="form__feedback form__feedback--error"
+						>
+							Description must be no more than 1000 characters
+						</div>
+						<div
+							*ngIf="propInvalid('description') && description.errors.nonAscii"
+							class="form__feedback form__feedback--error"
+						>
+							Non-printable character <i>{{description.errors.nonAscii}}</i> is not allowed.
+						</div>
+						<div
+							*ngIf="propInvalid('description') && description.errors.profanity"
+							class="form__feedback form__feedback--error"
+						>
+							Please refrain from using profane words in text.
+						</div>
+						<div class="form__counter">
+							{{ description.value ? description.value.length : 0 }} characters
+						</div>
+					</div>
+				</div>
+				<div class="form__group" [ngClass]="{ 'form__group--error': propInvalid('link') }">
+					<label class="form__label" for="disruption-link">Link:</label>
+					<input
+						id="disruption-link"
+						class="form__control"
+						type="text"
+						formControlName="link"
+						placeholder="http://"
+					/>
+					<div class="form__validation">
+						<div
+							*ngIf="propInvalid('link') && link.errors && link.errors.pattern"
+							class="form__feedback form__feedback--error"
+						>
+							Must be a valid link.
+						</div>
+						<div
+							*ngIf="propInvalid('link') && submittedForPublish && link.errors.required"
+							class="form__feedback form__feedback--error"
+						>
+							This field is required.
+						</div>
+					</div>
+				</div>
+				<fieldset
+					class="form__group"
+					[ngClass]="{ 'form__group--error': propInvalid('disruptionType') && submittedForPublish }"
+				>
+					<legend class="form__label">Type of disruption</legend>
+					<div class="form__control-group">
+						<div class="form__radio" *ngFor="let type of disruptionTypes; let i = index">
+							<input
+								[attr.id]="'disruption-type-' + i"
+								class="form__radio-input"
+								type="radio"
+								formControlName="disruptionType"
+								value="{{ type.value }}"
+							/>
+							<label [attr.for]="'disruption-type-' + i" class="form__label">{{ type.title }}</label>
+						</div>
+					</div>
+					<div
+						*ngIf="propInvalid('disruptionType') && submittedForPublish"
+						class="form__feedback form__feedback--error"
+					>
+						This field is required.
+					</div>
+				</fieldset>
+				<div
+					class="form__group"
+					[ngClass]="{ 'form__group--error': propInvalid('reason') && submittedForPublish }"
+				>
+					<label class="form__label" for="disruption-reason">Reason:</label>
+					<select id="disruption-reason" class="form__control" formControlName="reason">
+						<option *ngFor="let reason of reasons" [ngValue]="reason.value">
+							{{ reason.title }}
+						</option>
+					</select>
+					<div class="form__validation">
+						<div
+							*ngIf="propInvalid('reason') && submittedForPublish && reason.errors.required"
+							class="form__feedback form__feedback--error"
+						>
+							This field is required.
+						</div>
+					</div>
+				</div>
+				<div class="form__group"
+					[ngClass]="{ 'form__group--error': propInvalid('related') && related.errors.deleted }">
+					<label class="form__label" for="related"
+						>Related disruption event <span class="form__optional">(optional):</span></label
+					>
+					<ng-select
+						[items]="allDisruptions$ | async"
+						bindLabel="title"
+						[multiple]="true"
+						labelForId="related"
+						[hideSelected]="true"
+						[trackByFn]="trackByFn"
+						[loading]="autocompleteLoading"
+						[typeahead]="autocompleteInput$"
+						formControlName="related"
+					>
+					</ng-select>
+					<div class="form__validation">
+						<div
+							*ngIf="propInvalid('related') && related.errors.deleted"
+							class="form__feedback form__feedback--error"
+						>
+							One or more of the related disruptions have been deleted.
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<fieldset class="form__group">
+		<legend class="form__label" for="disruption-date">Validity date and time</legend>
+		<p class="form__hint">This is date and time the disruption is active for.</p>
+		<div class="grid form__group">
+			<div class="form__checkbox">
+				<input id="openEnded" type="checkbox" class="form__checkbox-input" formControlName="isOpenEnded" />
+				<label for="openEnded" class="form__label">This disruption has no end date</label>
+			</div>
+		</div>
+		<div
+			formArrayName="validityPeriods"
+			*ngFor="let item of validityPeriodsArr.controls; let i = index"
+			class="grid form__repeater"
+		>
+			<div [formGroupName]="i">
+				<div class="grid__row grid__row--align-bottom-xs form__group-set">
+					<div
+						class="form__group grid__col--xs-order-1 grid__col--xs-8 grid__col--lg-5 grid__col--xl-3"
+						[ngClass]="{
+							'form__group--error':
+								(propInvalid('validityPeriods') && hasErrors(i) && submittedForPublish)
+								|| getError(i, 'start_required')
+								|| (i > 0 && formError('openEndedMulti'))
+						}"
+					>
+						<label for="validity-{{ i }}-start" class="form__label">Start date</label>
+						<div class="form__control-wrapper">
+							<input
+								autocomplete="off"
+								formControlName="startDate"
+								[owlDateTime]="dt1"
+								[owlDateTimeTrigger]="dt1"
+								placeholder="Start date"
+								class="form__control"
+								id="validity-{{ i }}-start"
+							/>
+							<owl-date-time [startAt]="startStartDateAt(i)" #dt1></owl-date-time>
+						</div>
+					</div>
+					<div
+						class="form__group grid__col--xs-order-1 grid__col--xs-8 grid__col--lg-5 grid__col--xl-3"
+						[ngClass]="{
+							'form__group--error':
+								(propInvalid('validityPeriods') && hasErrors(i) && submittedForPublish)
+								|| getError(i, 'end_required')
+								|| getError(i, 'invalidRangeDaily')
+								|| getError(i, 'invalidRangeWeekly')
+								|| (i > 0 && formError('openEndedMulti'))
+						}"
+					>
+						<label for="validity-{{ i }}-end" class="form__label">End date</label>
+						<div class="form__control-wrapper">
+							<input
+								autocomplete="off"
+								formControlName="endDate"
+								[owlDateTime]="dtEnd"
+								[owlDateTimeTrigger]="dtEnd"
+								placeholder="End date"
+								class="form__control"
+								id="validity-{{ i }}-end"
+							/>
+							<owl-date-time [startAt]="startEndDateAt(i)" #dtEnd></owl-date-time>
+						</div>
+					</div>
+					<div
+						class="form__group grid__col--xs-8 grid__col--xs-order-3 grid__col--lg-order-2 grid__col--sm-4  grid__col--lg-4 grid__col--xl-3"
+						[ngClass]="{
+							'form__group--error':
+								(propInvalid('validityPeriods') && hasErrors(i) && submittedForPublish)
+								|| (i > 0 && formError('openEndedMulti'))
+						}"
+					>
+						<label for="validity-{{ i }}-repeating" class="form__label">Repeating</label>
+						<select id="validity-{{ i }}-repeating" formControlName="repeats" class="form__control">
+							<option *ngFor="let repeats of repeatOptions" [ngValue]="repeats.value">{{
+								repeats.title
+							}}</option>
+						</select>
+					</div>
+					<div
+						class="form__group grid__col--xs-2 grid__col--xs-order-2 grid__col--lg-order-3 grid__col--lg-1 grid__col--xl-order-4"
+						*ngIf="validityPeriodsArr.controls.length > 1"
+					>
+						<dm-icon-button
+							btnId="remove-validity-{{ i }}"
+							type="button"
+							(onClick)="remove(i)"
+							appearance="minimal"
+							icon="trash"
+							accessibilityLabel="Remove this validity period"
+						></dm-icon-button>
+					</div>
+					<div
+						class="form__group grid__col--xs-6 grid__col--xs-order-4 grid__col--sm-5 grid__col--lg-4 grid__col--lg-order-3  grid__col--lg-4 grid__col--xl-2 grid__col--xl-offset-0"
+						[ngClass]="{
+							'form__group--error':
+								(propInvalid('validityPeriods') && hasErrors(i) && submittedForPublish) ||
+								getError(i, 'ending_required') ||
+								getError(i, 'invalidEnding') ||
+								(i > 0 && formError('openEndedMulti'))
+						}"
+						*ngIf="validityPeriodsArr.value[i].repeats && !isOpenEnded"
+					>
+						<label for="validity-{{ i }}-ending" class="form__label">Ending on</label>
+						<div class="form__control-wrapper">
+							<input
+								autocomplete="off"
+								formControlName="ending"
+								[owlDateTime]="dtEnding"
+								[owlDateTimeTrigger]="dtEnding"
+								placeholder="Ending on"
+								class="form__control"
+								id="validity-{{ i }}-ending"
+							/>
+							<owl-date-time
+								[startAt]="startEndingAt(i)"
+								[pickerType]="'calendar'"
+								#dtEnding
+							></owl-date-time>
+						</div>
+					</div>
+				</div>
+				<div *ngIf="hasErrors(i); else show_validity_description" class="form__validation">
+					<div *ngIf="getError(i, 'end_required') && !pending" class="form__feedback form__feedback--error">
+						End date is required.
+					</div>
+					<div *ngIf="getError(i, 'start_required') && !pending" class="form__feedback form__feedback--error">
+						Start date is required.
+					</div>
+					<div
+						*ngIf="getError(i, 'ending_required') && !pending"
+						class="form__feedback form__feedback--error"
+					>
+						Ending date is required.
+					</div>
+					<div *ngIf="getError(i, 'invalidDates')" class="form__feedback form__feedback--error">
+						The start date must be before the end date.
+					</div>
+					<div *ngIf="getError(i, 'invalidEnding')" class="form__feedback form__feedback--error">
+						The final date must be after the end date of validity period.
+					</div>
+					<div *ngIf="getError(i, 'invalidRangeDaily')" class="form__feedback form__feedback--error">
+						The date range must be within 24 hours for daily repetitions.
+					</div>
+					<div *ngIf="getError(i, 'invalidRangeWeekly')" class="form__feedback form__feedback--error">
+						The date range must be within 7 days for weekly repetitions.
+					</div>
+				</div>
+				<ng-template #show_validity_description>
+				<div class="form__hint" *ngIf="validityPeriodsArr.value[i].repeats && !isOpenEnded && validityPeriodsArr.value[i].ending">
+						<span>
+							{{validityPeriodsArr.value[i].description}}
+					</span>					
+				</div></ng-template>
+			</div>
+		</div>
+		<div *ngIf="formError('openEndedMulti')" class="form__feedback form__feedback--error">
+			Only one validity period is allowed for open ended disruptions.
+		</div>
+		<dm-button
+			appearance="minimal"
+			(onClick)="addValidityPeriod()"
+			type="button"
+			iconBefore="add"
+			*ngIf="validityPeriodsArr.controls.length > 0 && !isOpenEnded"
+		>
+			Add another validity period
+		</dm-button>
+		<div
+			*ngIf="formError('validityPeriodRequired') && submittedForPublish"
+			class="form__feedback form__feedback--error"
+		>
+			At least one validity period must be added.
+		</div>
+	</fieldset>
+	<div class="grid">
+		<label class="form__label" for="publishing-range">Publishing date and time</label>
+		<p class="form__hint">
+			This is date and time the disruption data is available to view and should encompass the validity date(s).
+		</p>
+		<div class="grid__row form__group-set">
+			<div
+				class="form__group grid__col--xs-order-1 grid__col--xs-8 grid__col--lg-5 grid__col--xl-3"
+				[ngClass]="{
+					'form__group--error':
+						(propInvalid('publishingStart') && submittedForPublish) ||
+						formError('publishingRange') ||
+						formError('validityPeriodBeforeStart')
+				}"
+			>
+				<label for="publishing-start" class="form__label">Start date</label>
+				<div class="form__control-wrapper">
+					<input
+						autocomplete="off"
+						formControlName="publishingStart"
+						[owlDateTime]="dtPubStart"
+						[owlDateTimeTrigger]="dtPubStart"
+						placeholder="Start date"
+						class="form__control"
+						id="publishing-start"
+					/>
+					<owl-date-time [startAt]="startPublishStartAt()" #dtPubStart></owl-date-time>
+				</div>
+				<div
+					*ngIf="propInvalid('publishingStart') && submittedForPublish"
+					class="form__feedback form__feedback--error"
+				>
+					This field is required.
+				</div>
+			</div>
+			<div
+				class="form__group grid__col--xs-order-1 grid__col--xs-8 grid__col--lg-5 grid__col--xl-3"
+				[ngClass]="{
+					'form__group--error':
+						(propInvalid('publishingEnd') && submittedForPublish) ||
+						formError('publishingRange') ||
+						formError('validityPeriodAfterEnd')
+				}"
+			>
+				<label for="publishing-end" class="form__label">End date</label>
+				<input
+					autocomplete="off"
+					formControlName="publishingEnd"
+					[owlDateTime]="dtPubEnd"
+					[owlDateTimeTrigger]="dtPubEnd"
+					placeholder="End date"
+					class="form__control"
+					id="publishing-end"
+				/>
+				<owl-date-time [startAt]="startPublishEndAt()" #dtPubEnd></owl-date-time>
+				<div
+					*ngIf="propInvalid('publishingEnd') && submittedForPublish"
+					class="form__feedback form__feedback--error"
+				>
+					This field is required.
+				</div>
+			</div>
+		</div>
+		<div class="grid__row">
+			<div *ngIf="formError('publishingRange')" class="form__feedback form__feedback--error">
+				The start date must be before the end date.
+			</div>
+			<div *ngIf="formError('validityPeriodBeforeStart')" class="form__feedback form__feedback--error">
+				The publishing period must start before the first validity period.
+			</div>
+			<div *ngIf="formError('validityPeriodAfterEnd')" class="form__feedback form__feedback--error">
+				The publishing period must end after the last validity period.
+			</div>
+		</div>
+	</div>
+</div>

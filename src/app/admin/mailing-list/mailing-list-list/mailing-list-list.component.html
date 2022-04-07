@@ -1,0 +1,8 @@
+<dm-table
+	resource="mailing list"
+	[rowData]="mailingListEntries$ | async"
+	[loading]="mailingListService.loading$ | async"
+	[columnDefs]="columnDefs"
+	(edit)="onEdit($event)"
+	(delete)="onDelete($event)"
+></dm-table>

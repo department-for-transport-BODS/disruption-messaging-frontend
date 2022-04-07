@@ -1,0 +1,7 @@
+query operatorsList {
+	allOperators {
+		code
+		entityId
+		name
+	}
+}

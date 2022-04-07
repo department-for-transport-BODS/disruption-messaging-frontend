@@ -1,0 +1,32 @@
+@import 'src/app/shared/styles/variables/variables';
+@import 'src/app/shared/styles/functions/functions';
+
+.badge {
+	box-sizing: border-box;
+	display: inline-block;
+	background: $mint;
+	color: white;
+	padding: rem(2) $spacing-sm;
+	border-radius: rem(4);
+	margin: $spacing-xs $spacing-sm $spacing-sm 0;
+	max-width: 100%;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	&--sm {
+		font-size: rem(12);
+		line-height: $line-height-12;
+		padding: rem(2) $spacing-xs;
+	}
+}
+
+a.badge {
+	&:hover {
+		background: darken($mint, 2);
+		text-decoration: none;
+	}
+	&:focus {
+		outline: none;
+		box-shadow: $accessibility-box-shadow;
+	}
+}

@@ -1,0 +1,128 @@
+fragment HootSuiteProfileFragment on HootSuiteProfileType {
+	__typename
+	id
+	profileType
+	profileId
+	socialId
+	socialUsername
+}
+
+fragment SocialAccountFragment on SocialAccountType {
+	__typename
+	username
+	id
+	email
+	accountType
+	prettyName
+	facebookPages {
+		id
+		name
+	}
+	createdBy {
+		id
+		username
+		organisation {
+			id
+			name
+		}
+	}
+	hootsuiteProfiles {
+		...HootSuiteProfileFragment
+	}
+}
+
+query disruptionByIdForEdit($id: ID!) {
+	disruption(id: $id) {
+		id
+		isTemplate
+		title
+		description
+		link
+		type
+		reason
+		relatedDisruption {
+			edges {
+				node {
+					id
+					title
+					deleted
+				}
+			}
+		}
+		isOpenEnded
+		validityPeriod {
+			id
+			startDate
+			endDate
+			startTime
+			endTime
+			repetition
+			finalDate
+		}
+		publishingStart
+		publishingEnd
+		impact {
+			edges {
+				node {
+					id
+					mode
+					allOperators
+					advice
+					delay
+					severity
+					direction
+					journeyPlanner
+					operators {
+						edges {
+							node {
+								id
+								ref
+								name
+							}
+						}
+					}
+					lines {
+						edges {
+							node {
+								id
+								ref
+								name
+							}
+						}
+					}
+					stops {
+						edges {
+							node {
+								id
+								commonName
+								atcoCode
+								type
+								ref
+								latitude
+								longitude
+							}
+						}
+					}
+				}
+			}
+		}
+		socialMessages {
+			id
+			socialAccount {
+				...SocialAccountFragment
+			}
+			hootsuiteProfile {
+				...HootSuiteProfileFragment
+			}
+			publishOn
+			message
+			image {
+				name
+				url
+			}
+			published
+			publishedOn
+			lastPublishError
+		}
+	}
+}

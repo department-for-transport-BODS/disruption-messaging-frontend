@@ -1,0 +1,212 @@
+<div [formGroup]="messagingGroup" class="form messaging">
+	<div class="grid messaging__container">
+		<div formArrayName="messages" *ngFor="let m of messageArr.controls; let i = index" class="messaging__row">
+			<div [formGroupName]="i">
+				<div *ngIf="isEditable(m); else publishedView" class="grid__row form__group-set">
+					<div class="grid__col--xs-12 grid__col--md-6  grid__col--xl-3">
+						<div class="form__group" [ngClass]="{ 'form__group--error': propInvalid('socialAccount', i) && submittedForPublish }">
+							<label for="message-{{ i }}-account" class="form__label">Social Account:</label>
+							<ng-select id="message-{{ i }}-account" [items]="allAccounts" [hideSelected]="true" placeholder="Select account" formControlName="socialAccount"
+							    labelForId="id" class="form__control">
+								<ng-template ng-label-tmp let-item="item">
+									<span>{{item.displayName}} ({{item.accountType}})</span>
+								</ng-template>
+								<ng-template ng-option-tmp let-item="item">
+									<span>{{item.displayName}} ({{item.accountType}})</span>
+								</ng-template>
+							</ng-select>
+						</div>
+						<div *ngIf="account(i)?.isHootSuite" class="form__group" [ngClass]="{ 'form__group--error': propInvalid('hootSuiteProfile', i) && submittedForPublish }">
+							<label for="message-{{ i }}-hootsuite-profile" class="form__label">HootSuite Profile:</label>
+							<ng-select id="message-{{ i }}-hootsuite-profile" [items]="account(i)?.hootSuiteProfiles" [hideSelected]="true" labelForId="id"
+							    placeholder="Select HootSuite profile" formControlName="hootSuiteProfile" class="form__control" (change)="onValueChange($event, i)">
+								<ng-template ng-label-tmp let-item="item">
+									<span>{{getProfileDisplay(item)}}</span>
+								</ng-template>
+								<ng-template ng-option-tmp let-item="item">
+									<span>{{getProfileDisplay(item)}}</span>
+								</ng-template>
+							</ng-select>
+							<a *ngIf="twitterSocialIDArray[i]" href="https://twitter.com/i/user/{{ twitterSocialIDArray[i] }}" target="_blank">
+								<span id="twitter-link-{{ i }}">Twitter/{{ twitterSocialIDArray[i] }}</span>
+							</a>
+						</div>
+						<div class="form__validation" *ngIf="propInvalid('hootSuiteProfile', i) && submittedForPublish">
+							<div class="form__feedback form__feedback--error">
+								HootSuite Profile is required for HootSuite accounts.
+							</div>
+						</div>
+					</div>
+					<div class="grid__col--xs-12 grid__col--md-6 grid__col--xl-3">
+						<div class="form__group" [ngClass]="{ 'form__group--error':
+								submittedForPublish && (propInvalid('publishOn', i) || m.errors?.incorrect_publish)
+							}">
+							<label for="message-{{ i }}-publishon" class="form__label">Publishing date and time</label>
+							<div class="form__control-wrapper">
+								<input autocomplete="off" formControlName="publishOn" [owlDateTime]="dtPublishOn" [owlDateTimeTrigger]="dtPublishOn" placeholder="Publish on"
+								    class="form__control" id="message-{{ i }}-publishon" />
+								<owl-date-time [startAt]="startAt(i)" #dtPublishOn></owl-date-time>
+							</div>
+						</div>
+						<div class="form__validation" *ngIf="propInvalid('publishOn', i) && submittedForPublish">
+							<div class="form__feedback form__feedback--error">
+								This field is required.
+							</div>
+						</div>
+						<div class="form__validation" *ngIf="m.errors?.incorrect_publish && submittedForPublish">
+							<div class="form__feedback form__feedback--error">
+								HootSuite publishing time must be at least 5 minutes in the future.
+							</div>
+						</div>
+					</div>
+					<div class="grid__col--xs-12 grid__col--xl-3">
+						<div class="form__group" [ngClass]="{
+								'form__group--error':
+									(propInvalid('text', i) && submittedForPublish) ||
+									(text(i).errors && text(i).errors.profanity)
+							}">
+							<label class="form__label" for="message-text-{{ i }}">Message:</label>
+
+
+							<textarea id="message-text-{{i}}" class="form-control" formControlName="text"></textarea>
+							<div class="twitter-search-container">
+								<div id="message-user-info-{{i}}" class="twitter-search">
+										<div id="message-typetosearch-{{i}}" class="twitter-search__dropdown" *ngIf="i === searchIndex && typeToSearch">
+												<span class="twitter-search__item">Type to search Twitter handles</span>
+											</div>
+									<div id="message-loading-{{i}}" class="twitter-search__dropdown" *ngIf="i === searchIndex && isLoading">
+										<span class="twitter-search__item">Loading...</span>
+									</div>
+									<div id="message-noresults-{{i}}" class="twitter-search__dropdown" *ngIf="i === searchIndex && noResultsFound">
+										<span class="twitter-search__item">No results found</span>
+									</div>
+								</div>
+								<div class="popover-container">
+									<dm-popover-list id="message-popover-{{i}}" class="form-control" *ngIf="!isLoading && !noResultsFound && i === searchIndex && twitterUsers.length > 0"
+									    [popoverList]="twitterUsers" [index]="i" (userSelectedEvent)="itemSelectedEvent($event)"></dm-popover-list>
+								</div>
+							</div>
+						</div>
+						<div class="autofill-container">
+							<dm-button class="messaging__autofill" appearance="minimal" btnId="message-autofill-{{ i }}" size="xs" type="button" accessibilityLabel="Autofill disruption description"
+							    (onClick)="autoFill(i)" *ngIf="!text(i).value">Copy from disruption summary</dm-button>
+						</div>
+						<div class="form__validation" *ngIf="propInvalid('text', i)">
+							<div class="form__feedback form__feedback--error" *ngIf="text(i).errors && text(i).errors.maxlength">
+								Message must be no more than 280 characters
+							</div>
+							<div class="form__feedback form__feedback--error" *ngIf="text(i).errors && text(i).errors.profanity">
+								Please refrain from using profane words in text.
+							</div>
+						</div>
+						<div class="form__validation" *ngIf="propInvalid('text', i) && !text(i).invalid && submittedForPublish">
+							<div class="form__feedback form__feedback--error">
+								This field is required.
+							</div>
+						</div>
+						<div class="drag-and-drop-file" *ngIf="!isFileSizeError && image(i).value && !isUnsupportedFileType">
+							<div class="file">
+								<div class="info">
+									<!--  DM-1259: Revert Image Download -->
+										<!-- <a *ngIf="image(i).value.url; else fileNoDownload" href="{{image(i).value.url}}" target="_blank" download>
+											{{image(i).value.name}} 
+										  </a>
+										  <ng-template #fileNoDownload> -->
+									<h4 class="name" *ngIf="image(i).value.name; else fileNameString">
+										{{image(i)?.value.name}}
+									</h4>
+									<ng-template #fileNameString>
+										{{image(i)?.value}}
+									</ng-template>
+								<!-- </ng-template> -->
+								</div>
+
+								<div class="delete" title="Delete" (click)="deleteFile(i)">
+									<svg xmlns="http://www.w3.org/2000/svg" width="14" height="18" viewBox="0 0 14 18">
+										<path fill="#B1B1B1" fill-rule="nonzero" d="M1 16c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H3c-1.1 0-2 .9-2 2v10zm3.17-7.83a.996.996 0 0 1 1.41 0L7 9.59l1.42-1.42a.996.996 0 1 1 1.41 1.41L8.41 11l1.42 1.42a.996.996 0 1 1-1.41 1.41L7 12.41l-1.42 1.42a.996.996 0 1 1-1.41-1.41L5.59 11 4.17 9.58a.996.996 0 0 1 0-1.41zM10.5 1L9.79.29C9.61.11 9.35 0 9.09 0H4.91c-.26 0-.52.11-.7.29L3.5 1H1c-.55 0-1 .45-1 1s.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1h-2.5z"
+										/>
+									</svg>
+								</div>
+							</div>
+						</div>
+
+						<div class="form__control drag-and-drop-container" appDragAndDrop [index]="i" (fileDropped)="onFileDropped(i, $event)">
+							<input class="grid__col--xs-12 grid__col--md-6 grid__col--xl-6" type="file" id="message-image-{{ i }}" (change)="fileBrowseHandler(i, $event.target.files)" accept=".png, .jpg" />
+							<dm-button id="message-image-{{ i }}">Upload image</dm-button>
+							<p class="form__hint">Drag and drop or browse image</p>
+						</div>
+						<div class="form__validation" *ngIf="isFileSizeError">
+							<div class="form__feedback form__feedback--error file-validation-error">
+								Upload image size should be less than 4MB.
+							</div>
+						</div>
+						<div class="form__validation" *ngIf="isUnsupportedFileType">
+							<div class="form__feedback form__feedback--error file-validation-error">
+								Upload image type should be .png or .jpg.
+							</div>
+						</div>
+					</div>
+					<div class=" grid__col--xs-12 grid__col--md-4 grid__col--xl-2">
+						<div class="form__group">
+							<label class="form__label">Status:</label>
+							<div>{{ publishStatusMessage(i) }}</div>
+						</div>
+					</div>
+					<div class="grid__col--xs-1 grid__col--xs-offset-10 grid__col--sm-offset-11 grid__col--xl-offset-0 grid__col--xl-auto messaging__remove">
+						<dm-icon-button btnId="remove-validity-{{ i }}" type="button" (onClick)="removeMessage(i)" appearance="minimal" icon="trash"
+						    accessibilityLabel="Remove this message"></dm-icon-button>
+					</div>
+				</div>
+				<ng-template #publishedView>
+					<div class="grid__row form__group-set">
+						<div class="grid__col--xs-12 grid__col--md-6  grid__col--xl-3">
+							<div class="form__group">
+								<label class="form__label">Social Account:</label>
+								<select class="form__control" disabled="disabled">
+									<option>{{ m.value.socialAccount ? accountName(m.value.socialAccount.id) : null }}</option>
+								</select>
+							</div>
+							<div *ngIf="m.value.hootSuiteProfile" class="form__group">
+								<label class="form__label">HootSuite Profile:</label>
+								<select class="form__control" disabled="disabled">
+									<option>{{ getProfileDisplay(m.value.hootSuiteProfile) }}</option>
+								</select>
+								<a *ngIf="twitterSocialIDArray[i]" href="https://twitter.com/i/user/{{ twitterSocialIDArray[i] }}" target="_blank">
+									<span id="twitter-link-{{ i }}">Twitter/{{ twitterSocialIDArray[i] }}</span>
+								</a>
+							</div>
+						</div>
+						<div class=" grid__col--xs-12 grid__col--lg-6 grid__col--xl-3">
+							<div class="form__group">
+								<label class="form__label">Publishing date and time</label>
+								<div class="form__control-wrapper">
+									<input disabled="disabled" value="{{ formatDate(m.value.publishOn) }}" placeholder="Publish on" class="form__control" />
+								</div>
+							</div>
+						</div>
+						<div class=" grid__col--xs-12 grid__col--lg-6 grid__col--xl-3">
+							<div class="form__group">
+								<label class="form__label">Message:</label>
+								<textarea disabled="disabled" class="form__control">{{ m.value.text }}</textarea>
+							</div>
+							<!--  DM-1259: Revert Image Download -->
+							<!-- <div class="form__group">
+									<a *ngIf="m.value.image.url" href="{{m.value.image.url}}" target="_blank" download>
+										{{m.value.image.name}} 
+									  </a>
+							</div> -->
+						</div>
+						<div class=" grid__col--xs-12 grid__col--lg-4 grid__col--xl-3">
+							<div class="form__group">
+								<label class="form__label">Status:</label>
+								<div>{{ publishStatusMessage(i) }}</div>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+			</div>
+		</div>
+
+		<dm-button (onClick)="addNewMessage()" appearance="minimal" type="button" iconBefore="add">Add another message</dm-button>
+	</div>
+</div>

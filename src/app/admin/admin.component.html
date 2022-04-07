@@ -1,0 +1,15 @@
+<dm-page-header title="Administration"> </dm-page-header>
+<dm-tabs>
+	<dm-tab title="Users">
+		<dm-users *ngIf="currentTab == 'Users'" ></dm-users>
+	</dm-tab>
+	<dm-tab title="Organisations">
+		<dm-organisation *ngIf="currentTab == 'Organisations'" ></dm-organisation>
+	</dm-tab>
+	<dm-tab title="Social">
+		<dm-social *ngIf="currentTab == 'Social'" ></dm-social>
+	</dm-tab>
+	<dm-tab *ngIf="mailingListEnabled" title="Mailing List">
+		<dm-mailing-list *ngIf="currentTab == 'Mailing List'" ></dm-mailing-list>
+	</dm-tab>
+</dm-tabs>

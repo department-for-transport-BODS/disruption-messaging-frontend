@@ -1,0 +1,84 @@
+query disruptionsList(
+	$status: DisruptionStatusInput
+	$severity: SeverityInput
+	$mode: ModeInput
+	$operators: [String],
+	$lines: [String],
+	$startDate: Date
+	$endDate: Date
+	$isTemplate: Boolean
+	$first: Int!
+	$after: String
+	$titleFilter: String
+	$sortBy: [DisruptionSortableFields]
+) {
+	allDisruptions(
+		status: $status
+		severity: $severity
+		mode: $mode
+		operators: $operators
+		lines: $lines
+		validityStart: $startDate
+		validityEnd: $endDate
+		isTemplate: $isTemplate
+		first: $first
+		after: $after
+		title_Icontains: $titleFilter
+		sortBy: $sortBy
+	) {
+		totalCount
+		pageInfo {
+			hasNextPage
+			endCursor
+		}
+		edges {
+			node {
+				id
+				title
+				description
+				status
+				severity
+				isLive
+				impact {
+					edges {
+						node {
+							id
+							name
+							severity
+							mode
+							lines {
+								edges {
+									node {
+										id
+									}
+								}
+							}
+							stops {
+								edges {
+									node {
+										id
+										commonName
+									}
+								}
+							}
+							operators {
+								edges {
+									node {
+										id
+									}
+								}
+							}
+						}
+					}
+				}
+				validityPeriod {
+					startDate
+					endDate
+					startTime
+					endTime
+					finalDate
+				}
+			}
+		}
+	}
+}

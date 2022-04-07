@@ -1,0 +1,6 @@
+mutation deleteDisruption($id: ID) {
+	deleteDisruption(id: $id) {
+		success
+		errors
+	}
+}

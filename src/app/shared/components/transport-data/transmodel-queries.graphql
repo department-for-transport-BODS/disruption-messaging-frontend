@@ -1,0 +1,113 @@
+query operatorByMode($modes: [ModeTypeEnum]) {
+	allOperators(modes: $modes) {
+		code
+		entityId
+		name
+	}
+}
+
+query allLines($operators: [String], $modes: [ModeTypeEnum]) {
+	allLines(operators: $operators, modes: $modes) {
+		name
+		featureName
+		entityId
+		operatorEntityIds
+	}
+}
+
+query line($entityId: String!) {
+	line(entityId: $entityId) {
+		name
+		featureName
+		entityId
+		operatorEntityIds
+		boundingBox
+		features {
+		    type
+			geometry
+			properties
+		}
+	}
+}
+
+query searchStops($term: String!, $modes: [ModeTypeEnum]) {
+	searchStops(searchToken: $term, modes: $modes) {
+		featureName
+		entityId
+		atcoCode
+		stopType
+		lat
+		lon
+	}
+}
+
+query searchAreaLines($polygon: [OSGridCoordinate]!) {
+	searchAreaLines(polygon: $polygon) {
+		name
+		featureName
+		entityId
+		operatorEntityIds
+		boundingBox
+		features {
+			type
+			geometry
+			properties
+		}
+	}
+}
+
+query searchAreaStops($polygon: [OSGridCoordinate]!, $modes: [ModeTypeEnum]) {
+	searchAreaStops(polygon: $polygon, modes: $modes) {
+		featureName
+		entityId
+		atcoCode
+		stopType
+		lat
+		lon
+	}
+}
+
+
+query stopGeoJson($entityId: String!) {
+	stop(entityId: $entityId) {
+		featureName
+		entityId
+		atcoCode
+		stopType
+		lat
+		lon
+ 		features {
+ 			type
+ 			geometry
+ 			properties
+ 		}
+    }
+}
+
+query stopsGeoJson($entityIds: [String]!) {
+	stops(ids: $entityIds) {
+		featureName
+		entityId
+		atcoCode
+		stopType
+		lat
+		lon
+ 		features {
+ 			type
+ 			geometry
+ 			properties
+ 		}
+    }
+}
+
+query adminAreas {
+	adminAreas {
+		name
+  		atcoCode
+  		featureName
+  		codePrefix
+  		shortName
+  		boundingBox
+  		entityId
+	}
+}

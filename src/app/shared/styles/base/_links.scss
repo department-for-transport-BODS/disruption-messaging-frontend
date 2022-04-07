@@ -1,0 +1,12 @@
+//
+// _LINKS.scss
+//
+// Base styling for <a> tag
+
+a {
+	text-decoration: none;
+	color: $mint-dark;
+	&:hover {
+		text-decoration: underline;
+	}
+}

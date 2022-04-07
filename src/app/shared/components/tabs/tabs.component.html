@@ -1,0 +1,8 @@
+<ul [ngClass]="tabsClass">
+	<li *ngFor="let tab of tabs" class="tabs__item" [class.tabs__item--active]="tab.active">
+		<button class="tabs__button" (click)="navigateTo(tab)" type="button">
+			{{ tab.title }}
+		</button>
+	</li>
+</ul>
+<ng-content></ng-content>

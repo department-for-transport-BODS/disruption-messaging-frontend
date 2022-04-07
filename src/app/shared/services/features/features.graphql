@@ -1,0 +1,12 @@
+query feature($name: String!) {
+	feature(name: $name) {
+		enabled
+	}
+}
+
+query allFeatures {
+	allFeatures {
+		name
+		enabled
+	}
+}

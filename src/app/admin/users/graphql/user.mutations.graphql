@@ -1,0 +1,90 @@
+mutation updateUser($id: Int!, $params: UserInput!) {
+	updateUser(id: $id, params: $params) {
+		success
+		errors
+		data {
+			id
+			username
+			email
+			organisation {
+				id
+				name
+			}
+			transmodelRestrictions {
+				type
+				name
+				entityId
+			}
+			roles {
+				id
+				name
+				scope
+			}
+		}
+	}
+}
+
+mutation inviteUser($params: InvitationCreateInput!) {
+	inviteUser(params: $params) {
+		success
+		errors
+		data {
+			id
+			key
+			email
+			roles {
+				id
+				name
+				scope
+			}
+		}
+	}
+}
+
+mutation signUp($params: UserSignUpInput!) {
+	signUp(params: $params) {
+		success
+		errors
+		data {
+			id
+			username
+			email
+			roles {
+				id
+				name
+				scope
+			}
+			organisation {
+				name
+			}
+		}
+	}
+}
+
+mutation deleteUser($id: Int!) {
+	deleteUser(id: $id) {
+		success
+		errors
+	}
+}
+
+mutation changePassword($username: String!, $oldPassword: String!, $newPassword: String!) {
+	changePassword(username: $username, oldPassword: $oldPassword, newPassword: $newPassword) {
+		success
+		errors
+	}
+}
+
+mutation resetPassword($email: String!) {
+	resetPassword(email: $email) {
+		success
+		errors
+	}
+}
+
+mutation resetPasswordConfirm($uid: String!, $token: String!, $password: String!, $confirmPassword: String!) {
+	resetPasswordConfirm(uid: $uid, token: $token, newPassword: $password, reNewPassword: $confirmPassword) {
+		success
+		errors
+	}
+}

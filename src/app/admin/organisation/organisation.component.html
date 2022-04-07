@@ -1,0 +1,28 @@
+<dm-org-list id="organisation-list"></dm-org-list>
+<div class="mt-md">
+	<dm-button btnId="organisation-add" (onClick)="orgService.addOrganisation()" appearance="primary"
+		>Add new</dm-button
+	>
+</div>
+
+<ngx-smart-modal
+	id="org-edit-modal"
+	[identifier]="'orgModal'"
+	[closable]="false"
+	[escapable]="false"
+	[dismissable]="false"
+	customClass="nsm-dialog-animation-fade nsm-dialog-narrow"
+>
+	<dm-org-edit id="organisation-edit-dialog"></dm-org-edit>
+</ngx-smart-modal>
+
+<ngx-smart-modal
+	id="org-delete-confirm-modal"
+	[identifier]="'deleteConfirmModal'"
+	[closable]="false"
+	[escapable]="false"
+	[dismissable]="false"
+	customClass="nsm-dialog-animation-fade nsm-dialog-narrow"
+>
+	<dm-org-delete></dm-org-delete>
+</ngx-smart-modal>

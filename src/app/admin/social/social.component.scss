@@ -1,0 +1,68 @@
+@import 'src/app/shared/styles/variables/variables';
+@import 'src/app/shared/styles/functions/functions';
+
+.social-buttons {
+	display: flex;
+	flex-direction: column;
+	margin-top: $spacing-md;
+	&__button {
+		color: $font-color-default;
+		background: transparent;
+		border: 2px solid $mist;
+		border-radius: rem(4);
+		padding: $spacing-sm-withborder $spacing-md;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-right: $spacing-sm;
+		margin-bottom: $spacing-sm;
+	}
+
+	&__icon {
+		margin-right: $spacing-sm;
+	}
+
+	&__fb {
+		width: rem(26);
+		height: rem(26);
+		margin-left: 1.25rem;
+		margin-right: 1rem;
+	}
+
+	&__twitter {
+		width: rem(36);
+		height: rem(36);
+	}
+}
+
+.banner {
+	margin-bottom: $spacing-lg;
+}
+
+.delete-form {
+	&__actions {
+		display: flex;
+		justify-content: flex-end;
+	}
+	&__ok {
+		margin-left: $spacing-sm;
+	}
+}
+
+.wrap-text {
+	overflow-wrap: break-word;
+}
+
+.social-list-button {
+	display:  flex;
+}
+
+@include bp($tablet) {
+	.social-buttons {
+		flex-direction: row;
+		&__fb {
+			margin-left: 0.25rem;
+		}
+	}
+}
+

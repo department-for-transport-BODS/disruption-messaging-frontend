@@ -1,0 +1,50 @@
+@import 'src/app/shared/styles/variables/variables';
+@import 'src/app/shared/styles/functions/functions';
+.disruptions {
+	&__view-list {
+		margin-left: $spacing-sm;
+	}
+	&__controls {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+	&__display-mode {
+		display: flex;
+		margin-bottom: $spacing-md;
+		justify-content: flex-end;
+	}
+}
+
+.export {
+	display: flex;
+	justify-content: flex-end;
+
+	&__view-list {
+		margin-left: $spacing-sm;
+	}
+}
+
+@include bp($tablet) {
+	.disruptions {
+		&__controls {
+			flex-direction: row;
+		}
+	}
+}
+
+.export__checkbox {
+	padding-top: 0.5rem;
+	white-space: nowrap;
+	line-height: 0%;
+	
+	.export__label {
+		padding-left: 0.3rem;
+		margin-top: 0.3125rem;
+	}
+
+	.export__checkbox-input {
+		display: inline-block;
+	}
+}

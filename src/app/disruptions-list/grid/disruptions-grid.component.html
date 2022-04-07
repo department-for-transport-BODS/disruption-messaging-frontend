@@ -1,0 +1,23 @@
+<div class="grid__totals">
+	<div *ngIf="!isLoading">
+		<span class="grid__count">{{ totalCount }}</span> disruption{{ totalCount != 1 ? 's' : '' }}
+	</div>
+</div>
+
+<div class="grid__table">
+	<div class="grid__loading" *ngIf="isLoading"><div class="sr-only">Loading data &hellip;</div></div>
+	<ag-grid-angular
+		id="disruption-table"
+		style="width:100%; height: 100%; overflow: auto"
+		class="ag-theme-material"
+		[suppressHorizontalScroll]=false
+		[defaultColDef]="defaultColDef"
+		[columnDefs]="columnDefs"
+		[gridOptions]="gridOptions"
+		[suppressKeyboardEvent]="suppressKeyboardEvent"
+		(rowSelected)="onRowSelected($event)"
+		(gridReady)="onGridReady($event)"
+		(gridSizeChanged)="onGridSizeChanged()"
+	>
+	</ag-grid-angular>
+</div>

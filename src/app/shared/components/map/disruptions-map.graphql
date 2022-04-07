@@ -1,0 +1,61 @@
+query disruptionsMapList(
+	$status: DisruptionStatusInput
+	$severity: SeverityInput
+	$mode: ModeInput
+	$operators: [String]
+	$lines: [String]
+	$startDate: Date
+	$endDate: Date
+	$isTemplate: Boolean
+	$first: Int!
+	$titleFilter: String
+) {
+	allDisruptions(
+		status: $status
+		severity: $severity
+		mode: $mode
+		operators: $operators
+		lines: $lines
+		validityStart: $startDate
+		validityEnd: $endDate
+		isTemplate: $isTemplate
+		first: $first
+		title_Icontains: $titleFilter
+	) {
+		totalCount
+		pageInfo {
+			hasNextPage
+			endCursor
+		}
+		edges {
+			node {
+				id
+				title
+				description
+				status
+				severity
+				isLive
+				impact {
+					edges {
+						node {
+							id
+							name
+							mode
+							severity
+							stops {
+								edges {
+									node {
+										id
+										commonName
+										latitude
+										longitude
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

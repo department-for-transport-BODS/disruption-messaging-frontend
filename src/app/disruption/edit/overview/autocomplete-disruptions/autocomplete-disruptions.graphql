@@ -1,0 +1,10 @@
+query autcompleteDisruptionsList($titleFilter: String) {
+	allDisruptions(title_Icontains: $titleFilter) {
+		edges {
+			node {
+				id
+				title
+			}
+		}
+	}
+}

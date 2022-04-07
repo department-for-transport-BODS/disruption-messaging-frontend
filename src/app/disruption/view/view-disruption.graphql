@@ -1,0 +1,141 @@
+query disruptionById($id: ID!) {
+	disruption(id: $id) {
+		id
+		title
+		isTemplate
+		status
+		description
+		link
+		type
+		isOpenEnded
+		severity
+		created
+		createdBy {
+			id
+			username
+		}
+		publishingStart
+		publishingEnd
+		approvedBy {
+			id
+			username
+		}
+		isLive
+		comments {
+			created
+			user {
+				id
+				username
+			}
+			id
+			comment
+		}
+		socialMessages {
+			id
+			message
+			image {
+				name
+				url
+			}
+			socialAccount {
+				username
+				id
+				email
+				accountType
+				prettyName
+				createdBy {
+					id
+					username
+					organisation {
+						id
+						name
+					}
+				}
+				facebookPages {
+					name
+					id
+				}
+			}
+			hootsuiteProfile {
+				...HootSuiteProfileFragment
+			}
+			publishOn
+			published
+			publishedOn
+			lastPublishError
+		}
+		impact {
+			edges {
+				node {
+					id
+					advice
+					name
+					severity
+					mode
+					delay
+					operators {
+						edges {
+							node {
+								id
+								ref
+								name
+							}
+						}
+					}
+					lines {
+						edges {
+							node {
+								id
+								ref
+								name
+							}
+						}
+					}
+					stops {
+						edges {
+							node {
+								id
+								commonName
+							}
+						}
+					}
+				}
+			}
+		}
+		reason
+		validityPeriod {
+			id
+			startDate
+			endDate
+			startTime
+			endTime
+			days
+			repetition
+			finalDate
+		}
+		relatedDisruption {
+			totalCount
+			edges {
+				node {
+					id
+					title
+					status
+				}
+			}
+		}
+	}
+}
+
+mutation approveDisruption($id: ID, $comment: String) {
+	approveDisruption(id: $id, comment: $comment) {
+		success
+		errors
+	}
+}
+
+mutation rejectDisruption($id: ID, $comment: String) {
+	rejectDisruption(id: $id, comment: $comment) {
+		success
+		errors
+	}
+}

@@ -1,0 +1,26 @@
+<dm-user-list id="user-list"></dm-user-list>
+<div class="mt-md">
+	<dm-button btnId="user-add" (onClick)="userService.inviteUser()" appearance="primary">Invite user</dm-button>
+</div>
+
+<ngx-smart-modal
+	id="user-edit-modal"
+	[identifier]="'userEditModal'"
+	[closable]="false"
+	[escapable]="false"
+	[dismissable]="false"
+	customClass="nsm-dialog-animation-fade nsm-dialog-narrow"
+>
+	<dm-user-edit id="user-edit-dialog"></dm-user-edit>
+</ngx-smart-modal>
+
+<ngx-smart-modal
+	id="user-delete-confirm-modal"
+	[identifier]="'userDeleteModal'"
+	[closable]="false"
+	[escapable]="false"
+	[dismissable]="false"
+	customClass="nsm-dialog-animation-fade nsm-dialog-narrow"
+>
+	<dm-user-delete></dm-user-delete>
+</ngx-smart-modal>

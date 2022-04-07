@@ -1,0 +1,45 @@
+<div class="banner">
+	<dm-banner *ngIf="callbackMessage" appearance="{{ callbackStatus }}">{{ callbackMessage }}</dm-banner>
+</div>
+<dm-table
+	resource="social account"
+	[rowData]="socialAccounts$ | async"
+	[columnDefs]="columnDefs"
+	[showEditButton]=false
+	[loading]="socialService.loading$ | async"
+	(delete)="onDeleteButton($event.id)">
+</dm-table>
+<div class="social-buttons">
+	<button class="social-buttons__button" type="button" (click)="connectTwitter()">
+		<span class="social-buttons__icon social-buttons__twitter">
+			<svg-icon src="assets/icons/Twitter_Logo_Blue.svg"></svg-icon>
+		</span>
+		Connect Twitter
+	</button>
+	<button class="social-buttons__button" type="button" (click)="connectFacebook()">
+		<span class="social-buttons__icon social-buttons__fb">
+			<img src="assets/icons/f_logo_RGB-Blue_58.png" />
+		</span>
+		Connect Facebook
+	</button>
+	<button class="social-buttons__button" type="button" (click)="connectHootSuite()">
+		<span class="social-buttons__icon social-buttons__fb">
+			<img src="assets/icons/hoot_suite_130.png" />
+		</span>
+		Connect HootSuite
+	</button>
+</div>
+<ngx-smart-modal customClass="modal nsm-dialog-narrow" identifier="delete-modal">
+	<div class="form">
+		<h2>Remove social account integration</h2>
+		<p>Are you sure?</p>
+		<div class="delete-form__actions form__actions">
+			<div class="delete-form__cancel">
+				<dm-button btnId="disruption-delete-cancel" (onClick)="onCancel()">Cancel</dm-button>
+			</div>
+			<div class="delete-form__ok">
+				<dm-button btnId="disruption-delete-OK" appearance="warning" (onClick)="onOK()">Delete</dm-button>
+			</div>
+		</div>
+	</div>
+</ngx-smart-modal>

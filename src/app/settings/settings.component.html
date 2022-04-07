@@ -1,0 +1,99 @@
+<dm-page-header title="Settings">
+	<dm-button-group justify="right">
+		<dm-button appearance="primary" (onClick)="onSave()">Save</dm-button>
+	</dm-button-group>
+</dm-page-header>
+<div id="settings-enum-values">
+	<div class="settings-enum-values__feedback">
+		<dm-banner *ngIf="service.errors$ | async as errors" appearance="error"
+			>An error occured. Please ensure at least one value is selected for each setting.</dm-banner
+		>
+		<dm-banner id="signup-success" *ngIf="service.serverResponse$ | async" appearance="success">
+			<span>Settings updated.</span>
+		</dm-banner>
+	</div>
+
+	<ng-container *ngIf="enumValues && enumValues.length; else noItems">
+		<div *ngFor="let enum of enumValues; let i = index">
+			<dm-card-header>
+				{{ enum.type }}
+			</dm-card-header>
+			<dm-card>
+				<div class="settings-enum-values__container">
+					<div class="settings-enum-values__list">
+						<h4>All Values</h4>
+						<div
+							class="settings-enum-values__item"
+							cdkDropList
+							#allValuesList="cdkDropList"
+							[cdkDropListData]="enum.allValues"
+							[cdkDropListConnectedTo]="[currentValuesList]"
+							(cdkDropListDropped)="drop($event)"
+						>
+							<div class="settings-enum-values__box" *ngFor="let item of enum.allValues" cdkDrag>
+								{{ item | titlecase }}
+							</div>
+						</div>
+					</div>
+					<div class="settings-enum-values__list">
+						<h4>Current Values</h4>
+						<div
+							class="settings-enum-values__item"
+							cdkDropList
+							#currentValuesList="cdkDropList"
+							[cdkDropListData]="enum.currentValues"
+							[cdkDropListConnectedTo]="[allValuesList]"
+							(cdkDropListDropped)="drop($event)"
+						>
+							<div class="settings-enum-values__box" *ngFor="let item of enum.currentValues" cdkDrag>
+								{{ item | titlecase }}
+							</div>
+						</div>
+					</div>
+				</div>
+			</dm-card>
+		</div>
+	</ng-container>
+	<ng-template #noItems>
+		<div>
+			No enums found
+		</div>
+	</ng-template>
+	<dm-card-header>
+		User Usage Information
+	</dm-card-header>
+	<dm-card>
+<div class="grid__row user-usage-block">
+		<div class="form__control-wrapper form__group grid__col--xs-order-1 grid__col--xs-8 grid__col--lg-5 grid__col--xl-3">
+		<label for="startDate">Start date</label>
+						
+							<input
+								autocomplete="off"
+								[owlDateTime]="dt1"
+								[(ngModel)]="startDate"
+								[owlDateTimeTrigger]="dt1"
+								placeholder="Start date"
+								class="form__control"
+								id="start-date"
+							/>
+							<owl-date-time  #dt1></owl-date-time>
+						</div>
+						<div class="form__control-wrapper form__group grid__col--xs-order-1 grid__col--xs-8 grid__col--lg-5 grid__col--xl-3">
+						<label for="endDate">End date</label>
+						
+							<input
+								autocomplete="off"
+								[owlDateTime]="dt2"
+								[(ngModel)]="endDate"
+								[owlDateTimeTrigger]="dt2"
+								placeholder="End date"
+								class="form__control"
+								id="end-date"
+							/>
+							<owl-date-time  #dt2></owl-date-time></div></div>
+							<div class="form__control-wrapper form__group grid__col--xs-order-1 grid__col--xs-8 grid__col--lg-5 grid__col--xl-3 gen-csv-button">
+		<dm-button (onClick)="genCSV()" appearance="secondary" type="button">
+			Download CSV
+		</dm-button></div>
+	</dm-card>
+</div>

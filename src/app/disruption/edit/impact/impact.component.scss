@@ -1,0 +1,243 @@
+@import 'src/app/shared/styles/variables/variables';
+@import 'src/app/shared/styles/functions/functions';
+.impact-form {
+	&__choice {
+		margin-bottom: $spacing-sm;
+	}
+
+	&__option-label {
+		margin-bottom: $spacing-sm;
+	}
+
+	&__option-set {
+		display: flex;
+		justify-content: flex-start;
+		position: relative;
+		flex-wrap: wrap;
+		margin-bottom: $spacing-sm;
+	}
+	&__option-controls {
+		margin-bottom: $spacing-sm;
+	}
+
+	&__option {
+		background: transparent;
+		border: 2px solid $mist;
+		border-radius: rem(4);
+		padding: $spacing-sm-withborder $spacing-md;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition-property: border, background-color, color, left;
+		transition-timing-function: $transition-easing;
+		transition-duration: 0.25s;
+		margin-right: $spacing-sm;
+		margin-bottom: $spacing-sm;
+		white-space: nowrap;
+		&:focus {
+			outline: 0;
+			border-color: $mint;
+			box-shadow: $accessibility-box-shadow;
+		}
+		.impact-form__choice--chosen & {
+			.impact-form__icon {
+				color: white;
+			}
+			&:not(.impact-form__option--active) {
+				opacity: 0;
+				visibility: hidden;
+				width: 1px;
+				overflow: hidden;
+				padding-left: 0;
+				padding-right: 0;
+				clip: rect(0, 0, 0, 0);
+			}
+		}
+
+		&--active {
+			position: absolute;
+			left: 0;
+			background-color: $mint;
+			pointer-events: none;
+			color: white;
+			border-color: $mint;
+		}
+	}
+	&__icon {
+		color: $mint;
+		width: rem(32);
+		height: rem(32);
+		margin-right: $spacing-sm;
+		transition-property: height, width;
+		transition-timing-function: $transition-easing;
+		transition-duration: 0.25s;
+	}
+	&__actions {
+		display: flex;
+		justify-content: flex-end;
+	}
+	&__ok {
+		margin-left: $spacing-sm;
+	}
+	&__stops {
+		max-height: rem(400);
+		overflow-y: auto;
+		margin-top: $spacing-sm;
+		margin-bottom: $spacing-sm;
+	}
+	&__details-container {
+		margin-top: $spacing-md;
+	}
+	&__details {
+		margin-left: 0;
+		padding-left: 0;
+		padding-right: 0;
+	}
+	&__operators {
+		padding-top: 0.25rem;
+		padding-bottom: 0.25rem;
+	}
+	&__operator-tags {
+		display: flex;
+		flex-wrap: wrap;
+	}
+	&__operator-tag {
+		color: white;
+    	background-color: #00bbb0;
+    	border-radius: 0.25rem;
+    	flex: 0 1 auto;
+    	display: flex;
+    	padding: 0.35rem;
+    	margin-right: $spacing-sm;
+    	margin-bottom: $spacing-sm;
+    	align-items: center;
+    	flex-wrap: nowrap;
+    	white-space: nowrap;
+	}
+	&__warning {
+		margin: 0.5rem;
+	}
+}
+
+.impact-map {
+	width: 100%;
+	height: 60vh;
+	display: flex;
+}
+
+// Override ng-select CSS.
+.ng-select {
+	&-impact {
+		&.ng-select-disabled ::ng-deep > .ng-select-container {
+			background-color: $mist-lighter;
+		}
+		&.ng-select-multiple.ng-select-disabled ::ng-deep > .ng-select-container  {
+			background-color: $mist-lighter;
+			color: $mist;
+		}
+	}
+	&-opearators ::ng-deep > .ng-select-container {
+		&.ng-value-container {
+			.ng-value {
+			}
+		}
+	}
+}
+
+.ng-select.ng-select-impact.ng-select-disabled  {
+	&::ng-deep {
+		>.ng-select-container {
+			background-color: $mist-lighter;
+		}
+	}
+}
+
+.ng-select.ng-select-impact.ng-select-multiple.ng-select-disabled {
+	&::ng-deep {
+		>.ng-select-container {
+			.ng-value-container {
+				.ng-value {
+					background-color: $mist-lighter;
+					color: $mist;
+				}
+			}
+		}
+	}
+}
+
+.ng-select.ng-select-operators {
+	&::ng-deep {
+		>.ng-select-container {
+			.ng-arrow-wrapper {
+				.ng-arrow {
+					display: none;
+				}
+			}
+		}
+		.ng-select-container {
+			.ng-value-container {
+				.ng-value {
+					.ng-value-icon {
+						display: none;
+					}
+				}
+			}
+		}
+	}
+}
+
+.ng-select.ng-select-multiple {
+	&::ng-deep {
+		>.ng-select-container {
+			.ng-value-container {
+				.ng-value {
+					.ng-value-label {
+						display: inline;
+					}
+				}
+			}
+		}
+	}
+}
+
+@include bp($tablet) {
+	.impact-form {
+		&__option {
+			&:hover {
+				border-color: $mint;
+				color: $mint;
+				cursor: pointer;
+			}
+		}
+		&__option-label {
+			margin-bottom: 0;
+
+			.impact-form__choice--tall & {
+				margin-top: rem(12);
+			}
+		}
+		&__option-set,
+		&__option-controls {
+			margin-bottom: 0;
+		}
+		&__option-clear {
+			text-align: right;
+		}
+		&__details {
+			margin-left: 25%;
+		}
+	}
+	.ng-select.ng-select-multiple {
+		&::ng-deep {
+			>.ng-select-container {
+				.ng-value-container {
+					.ng-value {
+						.ng-value-label {
+							display: inline-block;
+						}
+					}
+				}
+			}
+		}
+	}
+}

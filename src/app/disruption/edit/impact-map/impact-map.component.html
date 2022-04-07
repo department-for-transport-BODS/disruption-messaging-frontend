@@ -1,0 +1,145 @@
+<div id="impact-map-container"
+	 class="map-container"
+>
+	<div class="map-buttons">
+		<dm-button *ngIf="!selectAll" appearance="minimal" id="map-select-all-button" (click)="toggleSelectAll()">Select All</dm-button>
+		<dm-button *ngIf="selectAll" appearance="minimal" id="map-deselect-all-button"(click)="toggleSelectAll()">De-select All</dm-button>
+	</div>
+	<dm-banner class="map-warning" *ngIf="warning" appearance="warning">{{ warning }}</dm-banner>
+	<div class="map-map">
+		<ngx-spinner
+			id="impact-loading-spinner"
+			bdColor="rgba(222,225,234,0.6)"
+			size="medium"
+			color="#00bbb0"
+			[fullScreen]="false"
+			>
+		</ngx-spinner>
+		<mgl-map
+			[style]="'mapbox://styles/ito-mapbox/cjxpzx0vh02vk1clb89qxbw3n'"
+			[zoom]="[initialZoom]"
+			[maxZoom]=[maxZoom]
+			[center]="centre"
+			interactive=true
+			class="mgl-map"
+			id="impact-map"
+			[preserveDrawingBuffer]=true
+			(load)="onLoad($event);"
+		>
+			<mgl-marker *ngIf="searchedCoordinates" [lngLat]="searchedCoordinates"></mgl-marker>
+			<mgl-control
+				mglGeocoder
+				[countries]="'gb'"
+				(results)="checkResults($event)"
+				(result)="drawMarker($event)"
+			></mgl-control>
+			<mgl-control
+				mglNavigation
+				[showCompass]="false"
+			></mgl-control>
+			<mgl-control
+				mglFullscreen
+			></mgl-control>
+			<ng-container>
+				<mgl-popup
+					*ngIf="hoveredStop"
+					[lngLat]="hoveredStop.geometry.coordinates"
+					[closeOnClick]="false"
+					[closeButton]="false"
+					id="map-popup-stop"
+					class="map-popup"
+					[offset]="5"
+					>
+					<map-popup
+						[stop]="hoveredStop.properties.displayName"
+					></map-popup>
+				</mgl-popup>
+				<mgl-popup
+					*ngIf="hoveredLines.length && !hoveredStop"
+					[lngLat]="hoveredLineCoordinates"
+					[closeOnClick]="false"
+					[closeButton]="false"
+					id="map-popup-line"
+					class="map-popup"
+					[offset]="5"
+					>
+					<map-popup
+						[lines]="hoveredLines"
+					></map-popup>
+				</mgl-popup>
+				<mgl-geojson-source
+					id="source-lines"
+					[data]="lines"
+					>
+				</mgl-geojson-source>
+				<mgl-geojson-source
+					id="source-stops"
+					[data]="stops"
+					>
+				</mgl-geojson-source>
+				<mgl-layer
+					id="layer-lines"
+					type="line"
+					source="source-lines"
+					[filter]="['all', ['==', '$type', 'LineString'], ['==', 'selected', false]]"
+					[paint]="{
+						'line-color': '#9098b0',
+						'line-width': 3
+					}"
+					(mouseEnter)="showLineInfo($event)"
+					(mouseLeave)="hideLineInfo()"
+					(click)="onLineClick($event)"
+				></mgl-layer>
+				<mgl-layer
+					id="layer-selected-lines"
+					type="line"
+					source="source-lines"
+					[filter]="['all', ['==', '$type', 'LineString'], ['==', 'selected', true]]"
+					[paint]="{
+						'line-color': '#00bbb0',
+						'line-width': 3
+					}"
+					(mouseEnter)="showLineInfo($event)"
+					(mouseLeave)="hideLineInfo()"
+					(click)="onLineClick($event)"
+				></mgl-layer>
+				<mgl-layer
+					id="layer-stops"
+					type="circle"
+					source="source-stops"
+					[filter]="['all', ['==', '$type', 'Point'], ['==', 'selected', false]]"
+					[paint]="{
+						'circle-stroke-width': 1,
+						'circle-stroke-color': '#5a6176',
+						'circle-stroke-opacity': 1,
+						'circle-color': '#9098b0',
+						'circle-opacity': 1,
+						'circle-radius': 8
+					}"
+					[minzoom]="showStopsMinZoom"
+					[maxzoom]="maxZoom + 1"
+					(mouseEnter)="showStopInfo($event)"
+					(mouseLeave)="hideStopInfo()"
+					(click)="onStopClick($event)"
+				></mgl-layer>
+				<mgl-layer
+					id="layer-selected-stops"
+					type="circle"
+					source="source-stops"
+					[filter]="['all', ['==', '$type', 'Point'], ['==', 'selected', true]]"
+					[paint]="{
+						'circle-stroke-width': 1,
+						'circle-stroke-color': '#00bbbb',
+						'circle-stroke-opacity': 1,
+						'circle-color': '#00bbbb',
+						'circle-radius': 8
+					}"
+					(mouseEnter)="showStopInfo($event)"
+					(mouseLeave)="hideStopInfo()"
+					(click)="onStopClick($event)"
+				></mgl-layer>
+			</ng-container>
+		</mgl-map>
+		<div class="no-results" *ngIf="noResultsFound">No results found</div>
+	<div>
+</div>

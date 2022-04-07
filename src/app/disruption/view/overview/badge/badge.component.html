@@ -1,0 +1,25 @@
+<span
+	attr.id="{{ id }}"
+	class="{{ badgeClasses }}"
+	*ngIf="!route"
+	[ngClass]="{ 'button--active': active }"
+	title="{{ title }}"
+>
+	<ng-container *ngTemplateOutlet="badgeContent"></ng-container>
+</span>
+
+<a
+	attr.id="{{ id }}"
+	class="{{ badgeClasses }}"
+	(click)="gotoRoute($event, route)"
+	*ngIf="route"
+	href="#"
+	title="Disruption status:"
+	title="{{ title }}"
+>
+	<ng-container *ngTemplateOutlet="badgeContent"></ng-container>
+</a>
+
+<ng-template #badgeContent>
+	<ng-content></ng-content>
+</ng-template>

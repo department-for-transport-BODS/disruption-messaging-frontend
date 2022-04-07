@@ -1,0 +1,12 @@
+<button
+	type="button"
+	attr.id="{{ btnId }}"
+	class="{{ buttonClasses }}"
+	(click)="onClickButton($event)"
+	*ngIf="icon"
+	attr.aria-label="{{ accessibilityLabel }}"
+	[attr.disabled]="disabled ? 'true' : null"
+	[ngClass]="{ 'icon-button--active': active }"
+>
+	<svg-icon class="icon-button__icon" src="assets/icons/{{ icon }}.svg"></svg-icon>
+</button>

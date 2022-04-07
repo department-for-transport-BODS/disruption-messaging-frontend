@@ -1,0 +1,11 @@
+<ng-select
+	[items]="allLines$ | async"
+	bindLabel="featureName"
+	bindValue="entityId"
+	placeholder="Services"
+	multiple="true"
+	[loading]="loading"
+	(change)="onValueChange($event)"
+	[(ngModel)]="selectedItems"
+	>
+</ng-select>

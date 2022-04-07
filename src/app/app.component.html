@@ -1,0 +1,23 @@
+<div class="container">
+	<a href="#dm-content" class="sr-shortcut">Skip to main content</a>
+	<a href="#dm-user-menu" class="sr-shortcut">Skip to toolbar</a>
+	<div class="tray" *ngIf="authenticated()">
+		<div class="top">
+			<div class="logo">Disruption Messaging</div>
+			<dm-version></dm-version>
+			<dm-main-menu></dm-main-menu>
+		</div>
+		<dm-org-menu></dm-org-menu>
+	</div>
+	<main class="main">
+		<div class="content-wrap">
+			<dm-user-menu *ngIf="authenticated()"></dm-user-menu>
+			<div id="dm-content" class="content">
+				<router-outlet></router-outlet>
+			</div>
+		</div>
+		<footer class="footer">
+			<dm-footer></dm-footer>
+		</footer>
+	</main>
+</div>

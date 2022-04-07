@@ -1,0 +1,200 @@
+<ngx-smart-modal
+	id="signup-modal"
+	[identifier]="'signUpModal'"
+	[closable]="false"
+	[escapable]="false"
+	[dismissable]="false"
+	[autostart]="true"
+	customClass="nsm-dialog-animation-fade nsm-dialog-narrow"
+>
+	<div
+		*ngIf="invitation$ | async as invitation; else loading"
+		id="user-form-container"
+		class="form"
+	>
+		<h2>Create an account</h2>
+		<div *ngIf="invitation.key; else invalidKey">
+			<form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+				<div
+					class="form__group"
+					[ngClass]="{ 'form__group--error': hasError('username') }"
+				>
+					<label class="form__label" for="signup-username"
+						>Username:</label
+					>
+					<input
+						id="signup-username"
+						class="form__control"
+						type="text"
+						formControlName="username"
+						required
+					/>
+					<div *ngIf="hasError('username')" class="form__validation">
+						<div
+							*ngIf="username.errors.required"
+							class="form__feedback form__feedback--error"
+						>
+							Username is required.
+						</div>
+						<div
+							*ngIf="username.errors.leadingSpace"
+							class="form__feedback form__feedback--error"
+						>
+							Username is not valid.
+						</div>
+					</div>
+				</div>
+				<div
+					class="form__group"
+					[ngClass]="{ 'form__group--error': hasError('password') }"
+				>
+					<label class="form__label" for="signup-password"
+						>Password:</label
+					>
+					<input
+						id="signup-password"
+						class="form__control"
+						type="password"
+						formControlName="password"
+					/>
+					<div *ngIf="hasError('password')" class="form__validation">
+						<div
+							*ngIf="password.errors.required"
+							class="form__feedback form__feedback--error"
+						>
+							Password is required
+						</div>
+					</div>
+				</div>
+				<div
+					class="form__group"
+					[ngClass]="{
+						'form__group--error':
+							hasError('confirmPassword') ||
+							(formSubmitted &&
+								signUpForm.errors?.confirmPasswordMisMatch)
+					}"
+				>
+					<label class="form__label" for="signup-confirm-password"
+						>Confirm Password:</label
+					>
+					<input
+						id="signup-confirm-password"
+						class="form__control"
+						type="password"
+						formControlName="confirmPassword"
+					/>
+					<div
+						*ngIf="
+							hasError('confirmPassword') ||
+							(formSubmitted &&
+								signUpForm.errors?.confirmPasswordMisMatch)
+						"
+						class="form__validation"
+					>
+						<div
+							*ngIf="
+								confirmPassword.invalid &&
+								confirmPassword.errors.required
+							"
+							class="form__feedback form__feedback--error"
+						>
+							Please confirm your password
+						</div>
+						<div
+							*ngIf="signUpForm.errors?.confirmPasswordMisMatch"
+							class="form__feedback form__feedback--error"
+						>
+							Passwords do not match
+						</div>
+					</div>
+				</div>
+				<div class="form__group">
+					<label class="form__label" for="signup-first-name"
+						>First Name:</label
+					>
+					<input
+						id="signup-first-name"
+						class="form__control"
+						type="text"
+						formControlName="firstName"
+					/>
+				</div>
+				<div class="form__group">
+					<label class="form__label" for="signup-surname"
+						>Surname:</label
+					>
+					<input
+						id="signup-surname"
+						class="form__control"
+						type="text"
+						formControlName="lastName"
+					/>
+				</div>
+			</form>
+			<dm-banner
+				*ngIf="usersService.errors$ | async as errors; else success"
+				appearance="error"
+				>{{ errors }}</dm-banner
+			>
+			<ng-template #success>
+				<dm-banner
+					id="signup-success"
+					*ngIf="usersService.serverResponse$ | async"
+					appearance="success"
+				>
+					<span>Signup successful.</span>
+				</dm-banner>
+			</ng-template>
+			<div class="form__actions">
+				<dm-button-group justify="right">
+					<dm-button
+						btnId="edit-user-modal-cancel"
+						(onClick)="this.onClose()"
+						>Close</dm-button
+					>
+					<dm-button
+						appearance="primary"
+						btnId="edit-user-modal-submit"
+						(onClick)="onSubmit()"
+						>Submit
+					</dm-button>
+				</dm-button-group>
+			</div>
+		</div>
+	</div>
+	<ng-template #loading>
+		<div class="invitation-loading">
+			Loading invitation details...
+		</div>
+		<dm-button
+			btnId="edit-user-modal-cancel-loading"
+			class="failure-close-button"
+			(onClick)="this.onClose()"
+			>Close</dm-button
+		>
+	</ng-template>
+	<ng-template #invalidKey>
+		<dm-banner
+			*ngIf="usersService.errors$ | async as errors"
+			appearance="error"
+			>{{ errors }}</dm-banner
+		>
+		<dm-banner class="invitation-invalid" appearance="error">
+			<span
+				>Invitation key has either been used already or has
+				expired.</span
+			>
+		</dm-banner>
+		<div class="form__actions">
+			<dm-button-group justify="right">
+				<dm-button
+					btnId="edit-user-modal-cancel-invalid"
+					class="failure-close-button"
+					(onClick)="this.onClose()"
+					>Close</dm-button
+				>
+			</dm-button-group>
+		</div>
+	</ng-template>
+</ngx-smart-modal>

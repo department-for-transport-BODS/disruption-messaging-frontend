@@ -1,0 +1,34 @@
+@import 'src/app/shared/styles/variables/variables';
+@import 'src/app/shared/styles/functions/functions';
+
+.map-container {
+	position: relative;
+}
+
+.mgl-map {
+	display: block;
+	height: 100%;
+	width: 100%;
+}
+
+.map-popup {
+	padding: $spacing-sm;
+	background: #fff;
+	border-radius: rem(4);
+	width: 30%;
+	position: relative;
+	transition: all 5s ease-in-out;
+}
+.map-popup__table {
+	width: 100%;
+	td:first-child {
+		white-space: nowrap;
+	}
+}
+
+.map-popup__table * {
+	padding: $spacing-xs;
+	background: transparent;
+	vertical-align: top;
+	height: auto;
+}

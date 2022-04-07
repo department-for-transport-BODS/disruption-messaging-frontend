@@ -1,0 +1,20 @@
+<div id="ml-delete-dialog" class="form">
+	<h2>Delete mailing list entry?</h2>
+	<p>
+		This action cannot be undone. Are you sure you want to delete mailing list entry
+		{{ entry && entry.email ? ' for ' + entry.email : '' }}?
+	</p>
+	<dm-spinner name='delete-mailing-list' [show]="service.loading$ | async"></dm-spinner>
+	<dm-banner *ngIf="service.errors$ | async as errors" appearance="error">{{ errors }}</dm-banner>
+	<dm-banner *ngIf="service.serverResponse$ | async" appearance="success">
+		<span>Mailing list entry has been deleted.</span>
+	</dm-banner>
+	<div class="form__actions">
+		<dm-button-group justify="right">
+			<dm-button btnId="edit-ml-modal-cancel" (onClick)="service.deleteModalClose()">Close</dm-button>
+			<dm-button appearance="warning" btnId="delete-ml-modal-submit" (onClick)="confirmDelete()"
+				>Delete</dm-button
+			>
+		</dm-button-group>
+	</div>
+</div>

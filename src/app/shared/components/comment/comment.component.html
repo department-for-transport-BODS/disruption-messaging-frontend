@@ -1,0 +1,10 @@
+<div class="{{ commentClasses }}">
+	<!-- <svg-icon class="comment__icon" src="assets/icons/user.svg"></svg-icon> -->
+	<div class="comment__content">
+		<div class="comment__meta">
+			<span class="comment__author" *ngIf="author">{{ author }}</span>
+			<span class="comment__date" *ngIf="date">{{ date }}</span>
+		</div>
+		<div class="comment__message" *ngIf="message">{{ message }}</div>
+	</div>
+</div>

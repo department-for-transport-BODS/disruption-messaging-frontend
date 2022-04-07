@@ -1,0 +1,9 @@
+// Set the number of columns you want to use on your layout.
+$grid-columns: 12 !default;
+// Set the gutter between columns.
+$gutter-width: 1rem !default;
+// Set a margin for the container sides.
+$grid-outer-margin: 2rem !default;
+
+$gutter-compensation: $gutter-width * 0.5 * -1;
+$half-gutter-width: $gutter-width * 0.5;

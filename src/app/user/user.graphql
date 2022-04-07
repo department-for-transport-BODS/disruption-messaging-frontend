@@ -1,0 +1,50 @@
+query user {
+	user {
+		id
+		email
+		username
+		organisation {
+			id
+			name
+		}
+		roles {
+			id
+			name
+			scope
+		}
+		capabilities {
+			enumOverrides
+		}
+		transmodelRestrictions {
+			id
+			type
+			entityId
+			name
+		}
+		disruptionNotifications {
+			totalCount
+			edges {
+				node {
+					id
+					status
+					sent
+					details {
+						message
+						disruption {
+							id
+							title
+						}
+						type
+						duplicates {
+							edges {
+								node {
+									id
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,57 @@
+<nav class="main-menu" role="navigation">
+	<ul class="main-menu__list">
+		<li class="main-menu__item" routerLinkActive="main-menu__item--expanded">
+			<a class="main-menu__link" routerLinkActive="main-menu__link--current" [routerLink]="['/dashboard']">
+				<svg-icon [applyCss]="true" class="main-menu__icon" src="assets/icons/dashboard.svg"></svg-icon>
+				<span class="main-menu__label">Dashboard</span>
+			</a>
+		</li>
+		<li
+			class="main-menu__item main-menu__item--has-children"
+			[ngClass]="{ 'main-menu__item--expanded': disruptionsActive }"
+		>
+			<a
+				[ngClass]="{ 'main-menu__link--current': disruptionsActive }"
+				class="main-menu__link"
+				[routerLink]="['/disruptions']"
+			>
+				<svg-icon class="main-menu__icon" src="assets/icons/disruption.svg"></svg-icon>
+				<span class="main-menu__label">Disruptions</span>
+			</a>
+			<ul class="main-menu__sub-nav">
+				<li>
+					<a
+						class="main-menu__sub-link"
+						routerLinkActive="main-menu__sub-link--current"
+						[routerLink]="['/disruptions']"
+						[routerLinkActiveOptions]="{ exact: true }"
+						>View all</a
+					>
+				</li>
+				<li>
+					<a
+						class="main-menu__sub-link"
+						[routerLink]="['/disruption/edit/']"
+						routerLinkActive="main-menu__sub-link--current"
+						[routerLinkActiveOptions]="{ exact: true }"
+						>Add new</a
+					>
+				</li>
+				<li>
+					<a
+						class="main-menu__sub-link"
+						[routerLink]="['/disruptions/templates/']"
+						routerLinkActive="main-menu__sub-link--current"
+						>Templates</a
+					>
+				</li>
+			</ul>
+		</li>
+		<li class="main-menu__item" routerLinkActive="main-menu__item--expanded">
+			<a class="main-menu__link" routerLinkActive="main-menu__link--current" [routerLink]="['/reviews']">
+				<svg-icon class="main-menu__icon" src="assets/icons/list-check.svg"></svg-icon>
+				<span class="main-menu__label">Reviews</span>
+			</a>
+		</li>
+	</ul>
+</nav>

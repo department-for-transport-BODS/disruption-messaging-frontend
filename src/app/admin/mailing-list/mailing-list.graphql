@@ -1,0 +1,52 @@
+query mailingList {
+	mailingList {
+		id
+		email
+		severity
+		optedIn
+		organisation {
+			id
+			name
+		}
+	}
+}
+
+mutation createMailingListEntry($params: MailingListInput!) {
+	createMailingListEntry(params: $params) {
+		success
+		errors
+		data {
+			email
+			severity
+			optedIn
+			organisation {
+				id
+				name
+			}
+		}
+	}
+}
+
+mutation updateMailingListEntry($id: Int!, $params: MailingListInput!) {
+	updateMailingListEntry(id: $id, params: $params) {
+		success
+		errors
+		data {
+			email
+			severity
+			optedIn
+			organisation {
+				id
+				name
+			}
+		}
+	}
+}
+
+mutation deleteMailingListEntry($id: Int!) {
+	deleteMailingListEntry(id: $id) {
+		success
+		errors
+	}
+}
+
